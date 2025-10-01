@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { track } from "@vercel/analytics"
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,6 +19,18 @@ export default function Page() {
   const [reportsBlurred, setReportsBlurred] = React.useState(true)
   const allBlurred = analyticsBlurred && billingBlurred && reportsBlurred
 
+  // Track demo interactions
+  const handleToggleAll = (checked: boolean) => {
+    setAnalyticsBlurred(checked)
+    setBillingBlurred(checked)
+    setReportsBlurred(checked)
+    track("demo_toggle_all", { blurred: checked })
+  }
+
+  const handleSectionUnlock = (section: string) => {
+    track("demo_section_unlocked", { section })
+  }
+
   // Fake APIs
   const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
   const fakeUpgradeOk = async () => {
@@ -27,6 +40,11 @@ export default function Page() {
     await wait(1200)
     if (Math.random() < 0.6) throw new Error("Payment authorization failed. Please try again.")
   }
+
+  // Track page view
+  React.useEffect(() => {
+    track("home_viewed")
+  }, [])
 
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
@@ -52,19 +70,33 @@ export default function Page() {
 
             <div className="flex flex-wrap gap-4 justify-center items-center pt-4">
               <Link href="/docs">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground group"
+                  onClick={() => track("hero_docs_clicked")}
+                >
                   <BookOpen className="mr-2 size-4" />
                   Documentation
                   <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link href="/blog">
-                <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/5 bg-transparent">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary/20 hover:bg-primary/5 bg-transparent"
+                  onClick={() => track("hero_blog_clicked")}
+                >
                   Read the story
                 </Button>
               </Link>
               <a href="https://github.com/griffenlabs/feature-lock" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/5 bg-transparent">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-primary/20 hover:bg-primary/5 bg-transparent"
+                  onClick={() => track("hero_github_clicked")}
+                >
                   View on GitHub
                 </Button>
               </a>
@@ -86,11 +118,7 @@ export default function Page() {
                 <Switch
                   id="blur-toggle"
                   checked={allBlurred}
-                  onCheckedChange={(v) => {
-                    setAnalyticsBlurred(v)
-                    setBillingBlurred(v)
-                    setReportsBlurred(v)
-                  }}
+                  onCheckedChange={handleToggleAll}
                   aria-label="Toggle blur"
                 />
                 <Label htmlFor="blur-toggle" className="cursor-pointer font-medium">
@@ -135,7 +163,10 @@ export default function Page() {
                   confirmLabel="Upgrade now"
                   pendingLabel="Upgrading..."
                   onConfirm={fakeUpgradeOk}
-                  onUnblur={() => setAnalyticsBlurred(false)}
+                  onUnblur={() => {
+                    setAnalyticsBlurred(false)
+                    handleSectionUnlock("analytics")
+                  }}
                 >
                   <div className="grid gap-4">
                     <div className="rounded-lg border border-primary/10 p-4 bg-primary/5">
@@ -214,7 +245,10 @@ export default function Page() {
                     </div>
                   )}
                   onConfirm={fakeUpgradeSometimes}
-                  onUnblur={() => setBillingBlurred(false)}
+                  onUnblur={() => {
+                    setBillingBlurred(false)
+                    handleSectionUnlock("billing")
+                  }}
                 >
                   <div className="space-y-4">
                     <div className="grid gap-2 sm:grid-cols-2">
@@ -266,7 +300,10 @@ export default function Page() {
                   pendingLabel="Unlocking..."
                   onConfirm={fakeUpgradeSometimes}
                   errorMessage="We couldn't complete your upgrade. Please try again."
-                  onUnblur={() => setReportsBlurred(false)}
+                  onUnblur={() => {
+                    setReportsBlurred(false)
+                    handleSectionUnlock("reports")
+                  }}
                 >
                   <div className="space-y-3">
                     <div className="rounded-lg border border-primary/10 p-4 bg-primary/5">
@@ -323,6 +360,7 @@ export default function Page() {
               <a
                 href="https://github.com/griffenlabs/feature-lock"
                 className="text-primary hover:text-primary/80 underline underline-offset-4"
+                onClick={() => track("footer_github_clicked")}
               >
                 View source
               </a>

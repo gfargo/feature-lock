@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { track } from "@vercel/analytics"
 import { ArrowLeft, Check, Copy, Terminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -10,13 +11,29 @@ import { Badge } from "@/components/ui/badge"
 export default function DocsPage() {
   const [copiedIndex, setCopiedIndex] = React.useState<number | null>(null)
 
-  const copyToClipboard = (text: string, index: number) => {
+  const copyToClipboard = (text: string, index: number, type: string) => {
     navigator.clipboard.writeText(text)
     setCopiedIndex(index)
     setTimeout(() => setCopiedIndex(null), 2000)
+
+    // Track code snippet copies
+    track("code_copied", {
+      type,
+      snippet_index: index,
+    })
   }
 
-  const CodeBlock = ({ code, language = "tsx", index }: { code: string; language?: string; index: number }) => (
+  const CodeBlock = ({
+    code,
+    language = "tsx",
+    index,
+    type = "code",
+  }: {
+    code: string
+    language?: string
+    index: number
+    type?: string
+  }) => (
     <div className="relative group">
       <pre className="bg-muted border border-primary/10 rounded-lg p-4 overflow-x-auto text-sm">
         <code className="text-foreground">{code}</code>
@@ -25,7 +42,7 @@ export default function DocsPage() {
         size="sm"
         variant="ghost"
         className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={() => copyToClipboard(code, index)}
+        onClick={() => copyToClipboard(code, index, type)}
       >
         {copiedIndex === index ? <Check className="size-4" /> : <Copy className="size-4" />}
       </Button>
@@ -41,13 +58,18 @@ export default function DocsPage() {
           size="sm"
           variant="ghost"
           className="opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={() => copyToClipboard(command, index)}
+          onClick={() => copyToClipboard(command, index, "install_command")}
         >
           {copiedIndex === index ? <Check className="size-4" /> : <Copy className="size-4" />}
         </Button>
       </div>
     </div>
   )
+
+  // Track page view
+  React.useEffect(() => {
+    track("docs_viewed")
+  }, [])
 
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
@@ -56,7 +78,11 @@ export default function DocsPage() {
           {/* Header */}
           <header className="space-y-6">
             <Link href="/">
-              <Button variant="ghost" className="-ml-4 text-primary hover:text-primary/80 hover:bg-primary/5">
+              <Button
+                variant="ghost"
+                className="-ml-4 text-primary hover:text-primary/80 hover:bg-primary/5"
+                onClick={() => track("docs_back_clicked")}
+              >
                 <ArrowLeft className="mr-2 size-4" />
                 Back to home
               </Button>
@@ -136,7 +162,11 @@ export default function DocsPage() {
               <p className="text-muted-foreground">Get up and running in minutes</p>
             </div>
 
-            <Tabs defaultValue="dialog" className="w-full">
+            <Tabs
+              defaultValue="dialog"
+              className="w-full"
+              onValueChange={(value) => track("docs_tab_changed", { tab: value })}
+            >
               <TabsList className="grid w-full grid-cols-2 max-w-md">
                 <TabsTrigger value="dialog">Dialog Mode</TabsTrigger>
                 <TabsTrigger value="inline">Inline Mode</TabsTrigger>
@@ -148,6 +178,7 @@ export default function DocsPage() {
                 </p>
                 <CodeBlock
                   index={2}
+                  type="quickstart_dialog"
                   code={`"use client"
 
 import { useState } from "react"
@@ -194,6 +225,7 @@ export function LockedFeature() {
                 </p>
                 <CodeBlock
                   index={3}
+                  type="quickstart_inline"
                   code={`"use client"
 
 import { useState } from "react"
@@ -447,6 +479,7 @@ export function LockedFeature() {
                 </p>
                 <CodeBlock
                   index={4}
+                  type="advanced_custom_overlay"
                   code={`<BlurWrapper
   isBlurred={locked}
   overlayMode="inline"
@@ -506,6 +539,7 @@ export function LockedFeature() {
                 </p>
                 <CodeBlock
                   index={5}
+                  type="advanced_multiple_sections"
                   code={`export function Dashboard() {
   const [analyticsLocked, setAnalyticsLocked] = useState(true)
   const [reportsLocked, setReportsLocked] = useState(true)
@@ -555,6 +589,7 @@ export function LockedFeature() {
                 <p className="text-muted-foreground mb-4">Control when the overlay appears for custom flows:</p>
                 <CodeBlock
                   index={6}
+                  type="advanced_controlled_state"
                   code={`export function ControlledExample() {
   const [locked, setLocked] = useState(true)
   const [overlayOpen, setOverlayOpen] = useState(false)
@@ -636,6 +671,7 @@ export function LockedFeature() {
                 </p>
                 <CodeBlock
                   index={7}
+                  type="troubleshooting_imports"
                   code={`{
   "compilerOptions": {
     "paths": {
@@ -653,6 +689,7 @@ export function LockedFeature() {
                 </p>
                 <CodeBlock
                   index={8}
+                  type="troubleshooting_blur"
                   code={`<BlurWrapper isBlurred={locked}>
   <div className="bg-white dark:bg-slate-900 p-6 rounded-lg">
     {/* Your content */}
@@ -688,6 +725,7 @@ export function LockedFeature() {
                   <a
                     href="https://github.com/griffenlabs/feature-lock"
                     className="text-primary hover:text-primary/80 underline underline-offset-4"
+                    onClick={() => track("docs_github_clicked")}
                   >
                     View on GitHub
                   </a>
@@ -695,12 +733,20 @@ export function LockedFeature() {
               </div>
               <div className="flex gap-4">
                 <Link href="/">
-                  <Button variant="outline" className="border-primary/20 hover:bg-primary/5 bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="border-primary/20 hover:bg-primary/5 bg-transparent"
+                    onClick={() => track("docs_demo_clicked")}
+                  >
                     Demo
                   </Button>
                 </Link>
                 <Link href="/blog">
-                  <Button variant="outline" className="border-primary/20 hover:bg-primary/5 bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="border-primary/20 hover:bg-primary/5 bg-transparent"
+                    onClick={() => track("docs_blog_clicked")}
+                  >
                     Blog
                   </Button>
                 </Link>

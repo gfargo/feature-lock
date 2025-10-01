@@ -1,16 +1,27 @@
 "use client"
 
+import * as React from "react"
 import { ArrowLeft, Code, Lock, Sparkles, Zap } from "lucide-react"
 import Link from "next/link"
+import { track } from "@vercel/analytics"
 import { Button } from "@/components/ui/button"
 
 export default function BlogPost() {
+  // Track page view
+  React.useEffect(() => {
+    track("blog_viewed")
+  }, [])
+
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
       <div className="p-8 pb-20 sm:p-20">
         <article className="mx-auto max-w-3xl space-y-8">
           <Link href="/">
-            <Button variant="ghost" className="mb-8 -ml-4 text-primary hover:text-primary/80 hover:bg-primary/5">
+            <Button
+              variant="ghost"
+              className="mb-8 -ml-4 text-primary hover:text-primary/80 hover:bg-primary/5"
+              onClick={() => track("blog_back_clicked")}
+            >
               <ArrowLeft className="mr-2 size-4" />
               Back to demo
             </Button>
@@ -234,7 +245,11 @@ export default function BlogPost() {
 
             <p className="text-muted-foreground">
               Head back to the{" "}
-              <Link href="/" className="text-primary hover:text-primary/80 underline underline-offset-4">
+              <Link
+                href="/"
+                className="text-primary hover:text-primary/80 underline underline-offset-4"
+                onClick={() => track("blog_demo_link_clicked")}
+              >
                 demo page
               </Link>{" "}
               and toggle the sections. Click "Upgrade now" to see the async flow in action. Notice how:
@@ -254,10 +269,19 @@ export default function BlogPost() {
               </p>
               <div className="flex gap-3">
                 <a href="https://github.com/griffenlabs/feature-lock" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">View on GitHub</Button>
+                  <Button
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                    onClick={() => track("blog_github_clicked")}
+                  >
+                    View on GitHub
+                  </Button>
                 </a>
                 <Link href="/">
-                  <Button variant="outline" className="border-primary/20 hover:bg-primary/5 bg-transparent">
+                  <Button
+                    variant="outline"
+                    className="border-primary/20 hover:bg-primary/5 bg-transparent"
+                    onClick={() => track("blog_demo_clicked")}
+                  >
                     Back to demo
                   </Button>
                 </Link>
