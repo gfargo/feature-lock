@@ -16,10 +16,20 @@ export default function DocsPage() {
     setCopiedIndex(index)
     setTimeout(() => setCopiedIndex(null), 2000)
 
-    // Track code snippet copies
+    // Track code snippet copies (CONVERSION GOAL - engagement)
     track("code_copied", {
       type,
       snippet_index: index,
+    })
+  }
+
+  const handleInstallCommandCopy = (command: string, index: number) => {
+    copyToClipboard(command, index, "install_command")
+
+    // Track installation intent (CONVERSION GOAL)
+    track("install_command_copied", {
+      command,
+      timestamp: new Date().toISOString(),
     })
   }
 
@@ -58,7 +68,7 @@ export default function DocsPage() {
           size="sm"
           variant="ghost"
           className="opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={() => copyToClipboard(command, index, "install_command")}
+          onClick={() => handleInstallCommandCopy(command, index)}
         >
           {copiedIndex === index ? <Check className="size-4" /> : <Copy className="size-4" />}
         </Button>
@@ -69,6 +79,27 @@ export default function DocsPage() {
   // Track page view
   React.useEffect(() => {
     track("docs_viewed")
+  }, [])
+
+  // Track scroll depth (CONVERSION GOAL - engagement)
+  React.useEffect(() => {
+    let maxScrollDepth = 0
+    const handleScroll = () => {
+      const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+      if (scrollPercentage > maxScrollDepth) {
+        maxScrollDepth = scrollPercentage
+        if (maxScrollDepth >= 25 && maxScrollDepth < 50) {
+          track("docs_scroll_25")
+        } else if (maxScrollDepth >= 50 && maxScrollDepth < 75) {
+          track("docs_scroll_50")
+        } else if (maxScrollDepth >= 75) {
+          track("docs_scroll_75")
+        }
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
