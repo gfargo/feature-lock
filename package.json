@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "npm run gen:registry",
     "build": "next build",
     "dev": "next dev",
+    "gen:registry": "node scripts/gen-registry.mjs",
     "lint": "next lint",
     "start": "next start"
   },
