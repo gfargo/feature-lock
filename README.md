@@ -148,240 +148,28 @@ export function Dashboard() {
 
 ### 🎨 Two Overlay Modes
 
-**Dialog Mode** - For critical upgrade decisions
-\`\`\`tsx
-<BlurWrapper
-  isBlurred={locked}
-  overlayMode="dialog"
-  dialogTitle="Upgrade Required"
-  onConfirm={handleUpgrade}
->
-  <LockedContent />
-</BlurWrapper>
-\`\`\`
+**Dialog Mode** - Full-screen modal for critical upgrade decisions
+**Inline Mode** - Contextual overlay positioned directly on locked content
 
-**Inline Mode** - For subtle, contextual upsells
-\`\`\`tsx
-<BlurWrapper
-  isBlurred={locked}
-  overlayMode="inline"
-  inlinePosition="centerCenter"
-  onConfirm={handleUpgrade}
->
-  <LockedContent />
-</BlurWrapper>
-\`\`\`
+### ⚡ Key Features
 
-### ⚡ Async-Ready
+- **Async-Ready**: Built with React 19's `useTransition` for seamless async operations
+- **Accessible by Default**: Focus blocking with `inert`, screen reader announcements, error focus management
+- **Flexible Positioning**: 9 position options for inline overlays
+- **Custom Overlays**: Full control with render props
+- **Error Handling**: Built-in error states with automatic focus management
 
-Built with React 19's `useTransition` for seamless async operations:
-- Automatic loading states
-- Error handling with focus management
-- Screen reader announcements
-- Unblur on success
-
-\`\`\`tsx
-<BlurWrapper
-  isBlurred={locked}
-  onConfirm={async () => {
-    await upgradeUserPlan()
-    // Automatically handles loading, errors, and unblur
-  }}
-  onUnblur={() => setLocked(false)}
->
-  <LockedContent />
-</BlurWrapper>
-\`\`\`
-
-### ♿ Accessible by Default
-
-- **Focus Blocking**: `inert` + `aria-hidden` prevents interaction with blurred content
-- **Screen Reader Support**: Pending states announced via live regions
-- **Error Focus**: Automatic focus on error messages
-- **Keyboard Shortcuts**: Enter to confirm, Escape to close (inline mode)
-
-### 🎛️ Flexible Positioning
-
-Position inline overlays anywhere:
-\`\`\`tsx
-inlinePosition="leftTop" | "leftCenter" | "leftBottom"
-            | "centerTop" | "centerCenter" | "centerBottom"
-            | "rightTop" | "rightCenter" | "rightBottom"
-\`\`\`
-
-### 🎨 Custom Overlays
-
-Full control with render props:
-\`\`\`tsx
-<BlurWrapper
-  isBlurred={locked}
-  overlay={({ isPending, error, confirm, resetError, registerErrorRef }) => (
-    <YourCustomOverlay
-      loading={isPending}
-      error={error}
-      onConfirm={confirm}
-      onRetry={resetError}
-    />
-  )}
->
-  <LockedContent />
-</BlurWrapper>
-\`\`\`
+See the [component README](./components/blurWrapper/README.md) for detailed examples and API documentation.
 
 ---
 
 ## 📚 BlurWrapper Documentation
 
-### Core Props
+For complete API documentation, advanced examples, and implementation patterns, see:
+- **[Component README](./components/blurWrapper/README.md)** - Full technical reference
+- **[Live Documentation](https://feature-lock.griffen.codes/docs)** - Interactive examples
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `isBlurred` | `boolean` | `false` | Controls blur effect and overlay visibility |
-| `overlayMode` | `"dialog" \| "inline"` | `"dialog"` | Display mode for upgrade prompt |
-| `onConfirm` | `() => Promise<void> \| void` | - | Async upgrade handler |
-| `onUnblur` | `() => void` | - | Called after successful upgrade |
-
-### Visual Customization
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `blurIntensity` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "3xl"` | `"md"` | Tailwind blur class |
-| `blurPx` | `number` | - | Exact blur in pixels (overrides intensity) |
-| `dimOpacity` | `number` | `1` | Opacity of blurred content (0-1) |
-| `disablePointerEvents` | `boolean` | `true` | Prevent interactions with blurred content |
-
-### Accessibility
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `focusInert` | `boolean` | `true` | Block keyboard focus on blurred content |
-| `announcePending` | `boolean` | `true` | Screen reader announces loading states |
-| `focusErrorOnSet` | `boolean` | `true` | Auto-focus errors for accessibility |
-| `returnFocusTo` | `HTMLElement \| string` | - | Element to restore focus after close |
-
-### Labels & Content
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `confirmLabel` | `string` | `"Confirm"` | Confirm button text |
-| `pendingLabel` | `string` | `"Working..."` | Loading state text |
-| `dialogTitle` | `string` | `"Feature unavailable"` | Dialog title |
-| `dialogDescription` | `string` | - | Dialog description |
-| `errorMessage` | `string` | - | Default error message |
-
-### Inline Mode
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `inlinePosition` | `InlinePosition` | `"centerCenter"` | Position of inline overlay panel |
-| `inlineContainerClassName` | `string` | - | Custom classes for container |
-| `inlinePanelClassName` | `string` | - | Custom classes for panel |
-| `inlineAriaLabel` | `string` | `"Upgrade panel"` | ARIA label |
-
-### Advanced
-
-| Prop | Type | Description |
-|------|------|-------------|
-| `overlay` | `ReactNode \| (args) => ReactNode` | Custom overlay content |
-| `open` | `boolean` | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | Open state change callback |
-| `autoUnblurOnConfirm` | `boolean` | Auto-call onUnblur after success |
-| `autoCloseDialogOnConfirm` | `boolean` | Close dialog after success |
-
-[**View Full API Reference →**](https://feature-lock.griffen.codes/docs)
-
----
-
-## 🎬 Examples
-
-### Multiple Independent Sections
-
-\`\`\`tsx
-export function Dashboard() {
-  const [analyticsLocked, setAnalyticsLocked] = useState(true)
-  const [reportsLocked, setReportsLocked] = useState(true)
-
-  return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <BlurWrapper
-        isBlurred={analyticsLocked}
-        onConfirm={() => upgradeFeature("analytics")}
-        onUnblur={() => setAnalyticsLocked(false)}
-      >
-        <AnalyticsCard />
-      </BlurWrapper>
-
-      <BlurWrapper
-        isBlurred={reportsLocked}
-        onConfirm={() => upgradeFeature("reports")}
-        onUnblur={() => setReportsLocked(false)}
-      >
-        <ReportsCard />
-      </BlurWrapper>
-    </div>
-  )
-}
-\`\`\`
-
-### Custom Error Handling
-
-\`\`\`tsx
-<BlurWrapper
-  isBlurred={locked}
-  overlayMode="inline"
-  onConfirm={async () => {
-    const response = await fetch("/api/upgrade", { method: "POST" })
-    if (!response.ok) throw new Error("Payment failed")
-  }}
-  overlay={({ isPending, error, confirm, registerErrorRef }) => (
-    <div>
-      <h3>Unlock Premium Features</h3>
-      {error && (
-        <div ref={registerErrorRef} role="alert">
-          {error.message}
-        </div>
-      )}
-      <button onClick={confirm} disabled={isPending}>
-        {isPending ? "Processing..." : "Upgrade Now"}
-      </button>
-    </div>
-  )}
->
-  <LockedContent />
-</BlurWrapper>
-\`\`\`
-
-### Controlled Overlay State
-
-\`\`\`tsx
-export function ControlledExample() {
-  const [locked, setLocked] = useState(true)
-  const [overlayOpen, setOverlayOpen] = useState(false)
-
-  return (
-    <>
-      <Button onClick={() => setOverlayOpen(true)}>
-        Unlock Feature
-      </Button>
-
-      <BlurWrapper
-        isBlurred={locked}
-        open={overlayOpen}
-        onOpenChange={setOverlayOpen}
-        onConfirm={async () => {
-          await upgradeUser()
-          setLocked(false)
-          setOverlayOpen(false)
-        }}
-      >
-        <LockedContent />
-      </BlurWrapper>
-    </>
-  )
-}
-\`\`\`
-
-[**View More Examples →**](https://feature-lock.griffen.codes/docs#advanced-examples)
+For more examples including custom error handling, controlled state, and advanced patterns, see the [component README](./components/blurWrapper/README.md).
 
 ---
 
