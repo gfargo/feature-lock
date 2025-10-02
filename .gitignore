@@ -27,3 +27,8 @@ yarn-error.log*
 next-env.d.ts
 
 .coco.config.json
+
+# AI Agents
+AGENTS.md
+GEMINI.md
+CLAUDE.md
