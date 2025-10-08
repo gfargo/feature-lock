@@ -754,7 +754,7 @@ export function LockedFeature() {
                 <p className="text-sm text-muted-foreground">
                   Need more help?{" "}
                   <a
-                    href="https://github.com/griffenlabs/feature-lock"
+                    href="https://github.com/gfargo/feature-lock"
                     className="text-primary hover:text-primary/80 underline underline-offset-4"
                     onClick={() => track("docs_github_clicked")}
                   >
@@ -772,15 +772,19 @@ export function LockedFeature() {
                     Demo
                   </Button>
                 </Link>
-                <Link href="/blog">
+                <a
+                  href="https://github.com/gfargo/feature-lock"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button
                     variant="outline"
                     className="border-primary/20 hover:bg-primary/5 bg-transparent"
                     onClick={() => track("docs_blog_clicked")}
                   >
-                    Blog
+                    GitHub
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </footer>

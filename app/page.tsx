@@ -80,17 +80,8 @@ export default function Page() {
                   <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link href="/blog">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-primary/20 hover:bg-primary/5 bg-transparent"
-                  onClick={() => track("hero_blog_clicked")}
-                >
-                  Read the story
-                </Button>
-              </Link>
-              <a href="https://github.com/griffenlabs/feature-lock" target="_blank" rel="noopener noreferrer">
+              {/* Story link removed per request */}
+              <a href="https://github.com/gfargo/feature-lock" target="_blank" rel="noopener noreferrer">
                 <Button
                   size="lg"
                   variant="outline"
@@ -358,7 +349,7 @@ export default function Page() {
             <p>
               Built with Next.js, Tailwind CSS, and shadcn/ui •{" "}
               <a
-                href="https://github.com/griffenlabs/feature-lock"
+                href="https://github.com/gfargo/feature-lock"
                 className="text-primary hover:text-primary/80 underline underline-offset-4"
                 onClick={() => track("footer_github_clicked")}
               >

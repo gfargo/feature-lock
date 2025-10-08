@@ -258,7 +258,7 @@ Check out our [**Contributing Guide →**](./CONTRIBUTING.md)
 
 \`\`\`bash
 # Clone the repo
-git clone https://github.com/griffenlabs/feature-lock.git
+git clone https://github.com/gfargo/feature-lock.git
 cd feature-lock
 
 # Install dependencies
@@ -317,7 +317,7 @@ Check that `showOverlayOnBlur` is not `false`:
 
 ## 📄 License
 
-MIT © [Griffen Labs](https://github.com/griffenlabs)
+MIT © [Griffen Labs](https://github.com/gfargo)
 
 See [LICENSE](./LICENSE) for details.
 
@@ -337,8 +337,8 @@ See [LICENSE](./LICENSE) for details.
 - **[Live Demo](https://feature-lock.griffen.codes)** - Try it yourself
 - **[Documentation](https://feature-lock.griffen.codes/docs)** - Full API reference
 - **[Blog Post](https://feature-lock.griffen.codes/blog)** - Design philosophy
-- **[GitHub Issues](https://github.com/griffenlabs/feature-lock/issues)** - Report bugs
-- **[Discussions](https://github.com/griffenlabs/feature-lock/discussions)** - Ask questions
+- **[GitHub Issues](https://github.com/gfargo/feature-lock/issues)** - Report bugs
+- **[Discussions](https://github.com/gfargo/feature-lock/discussions)** - Ask questions
 
 ---
 
@@ -372,13 +372,13 @@ See [LICENSE](./LICENSE) for details.
 
 If Feature Lock helps your project, please give it a star on GitHub! It helps others discover the project.
 
-[![Star on GitHub](https://img.shields.io/github/stars/griffenlabs/feature-lock?style=social)](https://github.com/griffenlabs/feature-lock)
+[![Star on GitHub](https://img.shields.io/github/stars/gfargo/feature-lock?style=social)](https://github.com/gfargo/feature-lock)
 
 <div align="center">
   <p><strong>Built with ❤️ by Griffen Labs</strong></p>
   <p>
     <a href="https://feature-lock.griffen.codes">Website</a> •
-    <a href="https://github.com/griffenlabs/feature-lock">GitHub</a> •
+    <a href="https://github.com/gfargo/feature-lock">GitHub</a> •
     <a href="https://twitter.com/griffenlabs">Twitter</a>
   </p>
 </div>
