@@ -6,7 +6,7 @@ This project uses a ShadcnUI-compatible component registry system that allows de
 
 ### Registry Structure
 
-\`\`\`
+```
 project/
 ├── scripts/
 │   ├── registry.config.mjs    # Component definitions
@@ -19,7 +19,7 @@ project/
 └── app/api/registry/          # API endpoints
     ├── route.ts               # Manifest endpoint
     └── r/[name]/route.ts      # Component endpoint
-\`\`\`
+```
 
 ### How It Works
 
@@ -52,7 +52,7 @@ To add a new component to the registry:
 1. **Create the component** in your project structure
 2. **Add to registry config**:
 
-\`\`\`javascript
+```javascript
 // scripts/registry.config.mjs
 {
   name: "my-component",
@@ -69,19 +69,19 @@ To add a new component to the registry:
   ],
   registryDependencies: ["button", "dialog"],
 }
-\`\`\`
+```
 
 3. **Generate the registry**:
 
-\`\`\`bash
+```bash
 npm run gen:registry
-\`\`\`
+```
 
 4. **Test the installation**:
 
-\`\`\`bash
+```bash
 npx shadcn@latest add http://localhost:3000/r/my-component
-\`\`\`
+```
 
 ## Deployment
 
@@ -89,17 +89,17 @@ npx shadcn@latest add http://localhost:3000/r/my-component
 
 Set the registry base URL for production:
 
-\`\`\`env
+```env
 NEXT_PUBLIC_REGISTRY_URL=https://feature-lock.griffen.codes/api/registry
-\`\`\`
+```
 
 ### Build Process
 
 The registry is automatically generated during build:
 
-\`\`\`bash
+```bash
 npm run build  # Runs gen:registry as prebuild step
-\`\`\`
+```
 
 ### Vercel Deployment
 
@@ -123,13 +123,13 @@ When you update package.json dependencies:
 To support multiple versions:
 
 1. Add version to component config:
-\`\`\`javascript
+```javascript
 {
   name: "blur-wrapper",
   version: "2.0.0",
   // ...
 }
-\`\`\`
+```
 
 2. Create separate JSON files for each version
 3. Update manifest to include version info
@@ -138,7 +138,7 @@ To support multiple versions:
 
 ### Local Testing
 
-\`\`\`bash
+```bash
 # Generate registry
 npm run gen:registry
 
@@ -150,13 +150,13 @@ cd ../test-project
 npx shadcn@latest add http://localhost:3000/r/blur-wrapper
 # Or test production:
 npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper
-\`\`\`
+```
 
 ### Validation
 
 Check generated JSON files:
 
-\`\`\`bash
+```bash
 # View manifest
 cat registry/registry.json
 
@@ -165,7 +165,7 @@ cat registry/r/blur-wrapper.json
 
 # Test API endpoint
 curl http://localhost:3000/api/registry/r/blur-wrapper
-\`\`\`
+```
 
 ## Troubleshooting
 

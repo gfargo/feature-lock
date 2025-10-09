@@ -38,7 +38,7 @@ Thank you for your interest in contributing to Feature Lock! This document provi
 
 ### Getting Started
 
-\`\`\`bash
+```bash
 # 1. Fork the repository on GitHub
 # 2. Clone your fork
 git clone https://github.com/YOUR_USERNAME/feature-lock.git
@@ -51,11 +51,11 @@ npm install
 npm run dev
 
 # 5. Open http://localhost:3000
-\`\`\`
+```
 
 ### Project Commands
 
-\`\`\`bash
+```bash
 # Development
 npm run dev              # Start dev server
 npm run build            # Build for production
@@ -67,11 +67,11 @@ npm run gen:registry     # Generate component registry
 # Linting (when configured)
 npm run lint            # Run ESLint
 npm run type-check      # Run TypeScript check
-\`\`\`
+```
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 feature-lock/
 ├── components/
 │   └── blurWrapper/
@@ -93,13 +93,13 @@ feature-lock/
 │   └── r/                       # Individual components
 ├── public/                      # Static assets
 └── [config files]               # Next.js, TypeScript, etc.
-\`\`\`
+```
 
 ## 🔧 Making Changes
 
 ### 1. Create a Branch
 
-\`\`\`bash
+```bash
 # For bug fixes
 git checkout -b fix/issue-description
 
@@ -111,29 +111,29 @@ git checkout -b docs/what-you-changed
 
 # For new components
 git checkout -b component/component-name
-\`\`\`
+```
 
 ### 2. Make Your Changes
 
 #### Adding a New Component
 
 1. **Create the component directory**
-   \`\`\`bash
+   ```bash
    mkdir -p components/yourComponent
-   \`\`\`
+   ```
 
 2. **Create the component file**
-   \`\`\`
+   ```
    components/yourComponent/your-component.tsx
-   \`\`\`
+   ```
 
 3. **Add component README**
-   \`\`\`
+   ```
    components/yourComponent/README.md
-   \`\`\`
+   ```
 
 4. **Update registry config**
-   \`\`\`javascript
+   ```javascript
    // scripts/registry.config.mjs
    {
      name: "your-component",
@@ -143,12 +143,12 @@ git checkout -b component/component-name
      include: [/^components\/yourComponent\/.*\.tsx$/],
      registryDependencies: ["button", "dialog"],
    }
-   \`\`\`
+   ```
 
 5. **Generate registry**
-   \`\`\`bash
+   ```bash
    npm run gen:registry
-   \`\`\`
+   ```
 
 #### Component Changes
 - Edit component files in `components/`
@@ -183,20 +183,20 @@ git checkout -b component/component-name
 - [ ] Registry installation works
 
 #### Test the Registry
-\`\`\`bash
+```bash
 # Generate registry
 npm run gen:registry
 
 # Test installation locally
 cd ../test-project
 npx shadcn@latest add http://localhost:3000/r/your-component
-\`\`\`
+```
 
 ### 4. Commit Your Changes
 
 Use clear, descriptive commit messages following [Conventional Commits](https://www.conventionalcommits.org/):
 
-\`\`\`bash
+```bash
 # Good commits
 git commit -m "fix(blur-wrapper): prevent focus trap when overlay closes"
 git commit -m "feat(blur-wrapper): add customizable error messages"
@@ -207,13 +207,13 @@ git commit -m "feat(paywall-banner): add new banner component"
 git commit -m "fix(blur-wrapper): ..."
 git commit -m "feat(paywall-banner): ..."
 git commit -m "docs(registry): ..."
-\`\`\`
+```
 
 ### 5. Push and Create PR
 
-\`\`\`bash
+```bash
 git push origin your-branch-name
-\`\`\`
+```
 
 Then create a Pull Request on GitHub with:
 - Clear title and description
@@ -247,7 +247,7 @@ Then create a Pull Request on GitHub with:
 
 ### Component Structure
 
-\`\`\`tsx
+```tsx
 "use client"
 
 import * as React from "react"
@@ -265,11 +265,11 @@ export type MyComponentProps = {
  * MyComponent provides a simple example structure
  * 
  * @example
- * \`\`\`tsx
+ * ```tsx
  * <MyComponent isVisible onVisibilityChange={console.log}>
  *   <p>Content</p>
  * </MyComponent>
- * \`\`\`
+ * ```
  */
 export default function MyComponent({
   isVisible = false,
@@ -279,7 +279,7 @@ export default function MyComponent({
   // Implementation
   return <div>{children}</div>
 }
-\`\`\`
+```
 
 ### Comments
 - Use JSDoc for public APIs
@@ -355,7 +355,7 @@ Each component needs:
 - Multiple difficulty levels
 
 ### Documentation Structure
-\`\`\`markdown
+```markdown
 # Component Name
 
 Brief description
@@ -367,7 +367,7 @@ Brief description
 ## Accessibility
 ## Best Practices
 ## Troubleshooting
-\`\`\`
+```
 
 ## 🔍 Review Process
 

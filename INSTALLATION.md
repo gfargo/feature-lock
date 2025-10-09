@@ -6,9 +6,9 @@ BlurWrapper is available as a component that can be installed via the ShadcnUI C
 
 Make sure you have a Next.js project with shadcn/ui set up:
 
-\`\`\`bash
+```bash
 npx shadcn@latest init
-\`\`\`
+```
 
 ## Installation
 
@@ -16,9 +16,9 @@ npx shadcn@latest init
 
 Install just the BlurWrapper component (recommended):
 
-\`\`\`bash
+```bash
 npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper
-\`\`\`
+```
 
 This will install:
 - The BlurWrapper component
@@ -29,15 +29,15 @@ This will install:
 
 Install the component with its README documentation:
 
-\`\`\`bash
+```bash
 npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper-full
-\`\`\`
+```
 
 ## Usage
 
 After installation, import and use the component:
 
-\`\`\`tsx
+```tsx
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
 
 function MyComponent() {
@@ -59,7 +59,7 @@ function MyComponent() {
     </BlurWrapper>
   )
 }
-\`\`\`
+```
 
 ## Component Props
 
@@ -75,7 +75,7 @@ Check out the [demo page](https://feature-lock.griffen.codes) for interactive ex
 
 Make sure your `tsconfig.json` has the correct path aliases:
 
-\`\`\`json
+```json
 {
   "compilerOptions": {
     "paths": {
@@ -83,15 +83,15 @@ Make sure your `tsconfig.json` has the correct path aliases:
     }
   }
 }
-\`\`\`
+```
 
 ### Missing dependencies
 
 If you see dependency errors, install them manually:
 
-\`\`\`bash
+```bash
 npm install @radix-ui/react-dialog lucide-react
-\`\`\`
+```
 
 ### Styling issues
 
