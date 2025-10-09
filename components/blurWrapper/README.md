@@ -118,6 +118,31 @@ export function Dashboard() {
 }
 \`\`\`
 
+### Secondary Action Button
+
+\`\`\`tsx
+import { Sparkles } from "lucide-react"
+
+<BlurWrapper
+  isBlurred={locked}
+  icon={Sparkles}
+  dialogTitle="Upgrade to Pro"
+  dialogDescription="Unlock advanced features and premium support"
+  confirmLabel="Start Free Trial"
+  secondaryLabel="Learn More"
+  onConfirm={async () => {
+    await startTrial()
+    setLocked(false)
+  }}
+  onSecondaryConfirm={async () => {
+    window.open("/pricing", "_blank")
+  }}
+  onUnblur={() => setLocked(false)}
+>
+  <PremiumFeature />
+</BlurWrapper>
+\`\`\`
+
 ---
 
 ## API Reference
@@ -141,6 +166,7 @@ export function Dashboard() {
 | `disablePointerEvents` | `boolean` | `true` | Prevent interactions with blurred content |
 | `className` | `string` | - | Container className |
 | `contentClassName` | `string` | - | Content wrapper className |
+| `icon` | `LucideIcon` | `Lock` | Custom Lucide icon for overlay |
 
 ### Accessibility
 
@@ -160,6 +186,16 @@ export function Dashboard() {
 | `dialogTitle` | `string` | `"Feature unavailable"` | Dialog title |
 | `dialogDescription` | `string` | - | Dialog description |
 | `errorMessage` | `string` | - | Default error message |
+| `secondaryLabel` | `string` | - | Text for secondary action button |
+| `secondaryPendingLabel` | `string` | `"Working..."` | Text during secondary action |
+
+### Secondary Actions
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `onSecondaryConfirm` | `() => Promise<void> \| void` | Async handler for secondary action |
+| `onSecondaryConfirmError` | `(error: unknown) => void` | Callback when secondary action fails |
+| `onSecondaryConfirmFinally` | `(result: "success" \| "error") => void` | Callback after secondary action completes |
 
 ### Inline Mode
 

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, Lock, Loader2 } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 type BlurIntensity = "sm" | "md" | "lg" | "xl" | "2xl" | "3xl"
 type OverlayMode = "dialog" | "inline"
@@ -43,6 +44,8 @@ type Labels = {
   title: string
   description: string
   error: string
+  secondary?: string
+  secondaryPending?: string
 }
 
 export type BlurWrapperProps = {
@@ -61,6 +64,9 @@ export type BlurWrapperProps = {
   contentClassName?: string
   testId?: string
 
+  // Custom icon
+  icon?: LucideIcon
+
   // Overlay behavior
   overlayMode?: OverlayMode
   overlay?: React.ReactNode | ((args: OverlayRenderArgs) => React.ReactNode)
@@ -77,6 +83,11 @@ export type BlurWrapperProps = {
   onConfirmError?: (error: unknown) => void
   onConfirmFinally?: (result: "success" | "error") => void
 
+  // Secondary button (optional)
+  onSecondaryConfirm?: () => Promise<void> | void
+  onSecondaryConfirmError?: (error: unknown) => void
+  onSecondaryConfirmFinally?: (result: "success" | "error") => void
+
   // Labels (new) + back-compat single props
   labels?: Partial<Labels>
   confirmLabel?: string
@@ -84,6 +95,8 @@ export type BlurWrapperProps = {
   dialogTitle?: string
   dialogDescription?: string
   errorMessage?: string
+  secondaryLabel?: string
+  secondaryPendingLabel?: string
 
   // Behavior flags
   autoCloseDialogOnConfirm?: boolean
@@ -155,6 +168,7 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
     className,
     contentClassName,
     testId,
+    icon,
 
     overlayMode = "dialog",
     overlay,
@@ -168,12 +182,18 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
     onConfirmError,
     onConfirmFinally,
 
+    onSecondaryConfirm,
+    onSecondaryConfirmError,
+    onSecondaryConfirmFinally,
+
     labels,
     confirmLabel = "Confirm",
     pendingLabel = "Working...",
     dialogTitle = "Feature unavailable",
     dialogDescription = "This feature is currently not accessible. You may need additional permissions or a higher plan.",
     errorMessage = "Something went wrong. Please try again.",
+    secondaryLabel,
+    secondaryPendingLabel = "Working...",
 
     autoCloseDialogOnConfirm = true,
     autoUnblurOnConfirm = true,
@@ -200,6 +220,8 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
     title: labels?.title ?? dialogTitle,
     description: labels?.description ?? dialogDescription,
     error: labels?.error ?? errorMessage,
+    secondary: labels?.secondary ?? secondaryLabel,
+    secondaryPending: labels?.secondaryPending ?? secondaryPendingLabel,
   }
 
   // Internal controlled/uncontrolled open
@@ -268,6 +290,7 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
 
   // Async confirm using useTransition
   const [isPending, startTransition] = React.useTransition()
+  const [isSecondaryPending, startSecondaryTransition] = React.useTransition()
   const close = () => handleOpenChange(false)
 
   // Error focusing refs
@@ -297,6 +320,23 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
         setError(e)
         onConfirmError?.(e)
         onConfirmFinally?.("error")
+        if (focusErrorOnSet) focusError()
+      }
+    })
+  }
+
+  const handleSecondaryConfirm = () => {
+    resetError()
+    startSecondaryTransition(async () => {
+      try {
+        await Promise.resolve(onSecondaryConfirm?.())
+        onSecondaryConfirmFinally?.("success")
+        if (autoUnblurOnConfirm) onUnblur?.()
+        if (autoCloseDialogOnConfirm) close()
+      } catch (e) {
+        setError(e)
+        onSecondaryConfirmError?.(e)
+        onSecondaryConfirmFinally?.("error")
         if (focusErrorOnSet) focusError()
       }
     })
@@ -346,34 +386,58 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
     )
   }
 
+  const IconComponent = icon || Lock
+
   const renderDefaultInline = () => (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <Lock className="size-4 text-neutral-500" aria-hidden={true} />
+        <IconComponent className="size-4 text-neutral-500" aria-hidden={true} />
         <p className="text-sm font-medium">{normalizedLabels.title || "Upgrade required"}</p>
       </div>
       {normalizedLabels.description ? (
         <p className="text-sm text-muted-foreground">{normalizedLabels.description}</p>
       ) : null}
       <ErrorBox />
-      <div className="flex gap-2 justify-end">
-        <Button
-          onClick={handleConfirm}
-          disabled={isPending}
-          aria-busy={isPending}
-          aria-describedby={announcePending ? statusId : undefined}
-          className="bg-neutral-900 text-white hover:bg-neutral-800"
-        >
-          {isPending ? (
-            <span className="inline-flex items-center gap-2">
-              <Loader2 className="size-4 animate-spin" aria-hidden={true} />
-              {normalizedLabels.pending}
-            </span>
-          ) : (
-            normalizedLabels.confirm
-          )}
-        </Button>
-      </div>
+      {(onConfirm || onSecondaryConfirm) ? (
+        <div className="flex gap-2 justify-end">
+          {onSecondaryConfirm && normalizedLabels.secondary ? (
+            <Button
+              onClick={handleSecondaryConfirm}
+              disabled={isSecondaryPending || isPending}
+              aria-busy={isSecondaryPending}
+              aria-describedby={announcePending ? statusId : undefined}
+              variant="outline"
+            >
+              {isSecondaryPending ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="size-4 animate-spin" aria-hidden={true} />
+                  {normalizedLabels.secondaryPending}
+                </span>
+              ) : (
+                normalizedLabels.secondary
+              )}
+            </Button>
+          ) : null}
+          {onConfirm ? (
+            <Button
+              onClick={handleConfirm}
+              disabled={isPending || isSecondaryPending}
+              aria-busy={isPending}
+              aria-describedby={announcePending ? statusId : undefined}
+              className="bg-neutral-900 text-white hover:bg-neutral-800"
+            >
+              {isPending ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="size-4 animate-spin" aria-hidden={true} />
+                  {normalizedLabels.pending}
+                </span>
+              ) : (
+                normalizedLabels.confirm
+              )}
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
       <PendingStatus />
     </div>
   )
@@ -441,7 +505,7 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Lock className="size-4 text-neutral-500" aria-hidden={true} />
+                <IconComponent className="size-4 text-neutral-500" aria-hidden={true} />
                 {normalizedLabels.title}
               </DialogTitle>
               {normalizedLabels.description ? (
@@ -451,24 +515,46 @@ const BlurWrapper = React.forwardRef<HTMLDivElement, BlurWrapperProps>(function 
             <div className="px-1">
               <ErrorBox />
             </div>
-            <DialogFooter className="gap-2 sm:justify-end">
-              <Button
-                onClick={handleConfirm}
-                disabled={isPending}
-                aria-busy={isPending}
-                aria-describedby={announcePending ? statusId : undefined}
-                className="bg-neutral-900 text-white hover:bg-neutral-800"
-              >
-                {isPending ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Loader2 className="size-4 animate-spin" aria-hidden={true} />
-                    {normalizedLabels.pending}
-                  </span>
-                ) : (
-                  normalizedLabels.confirm
-                )}
-              </Button>
-            </DialogFooter>
+            {(onConfirm || onSecondaryConfirm) ? (
+              <DialogFooter className="gap-2 sm:justify-end">
+                {onSecondaryConfirm && normalizedLabels.secondary ? (
+                  <Button
+                    onClick={handleSecondaryConfirm}
+                    disabled={isSecondaryPending || isPending}
+                    aria-busy={isSecondaryPending}
+                    aria-describedby={announcePending ? statusId : undefined}
+                    variant="outline"
+                  >
+                    {isSecondaryPending ? (
+                      <span className="inline-flex items-center gap-2">
+                        <Loader2 className="size-4 animate-spin" aria-hidden={true} />
+                        {normalizedLabels.secondaryPending}
+                      </span>
+                    ) : (
+                      normalizedLabels.secondary
+                    )}
+                  </Button>
+                ) : null}
+                {onConfirm ? (
+                  <Button
+                    onClick={handleConfirm}
+                    disabled={isPending || isSecondaryPending}
+                    aria-busy={isPending}
+                    aria-describedby={announcePending ? statusId : undefined}
+                    className="bg-neutral-900 text-white hover:bg-neutral-800"
+                  >
+                    {isPending ? (
+                      <span className="inline-flex items-center gap-2">
+                        <Loader2 className="size-4 animate-spin" aria-hidden={true} />
+                        {normalizedLabels.pending}
+                      </span>
+                    ) : (
+                      normalizedLabels.confirm
+                    )}
+                  </Button>
+                ) : null}
+              </DialogFooter>
+            ) : null}
           </>
         )}
       </DialogContent>

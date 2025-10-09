@@ -363,6 +363,11 @@ export function LockedFeature() {
                     defaultValue="true"
                     description="Prevents clicking/interacting with blurred content"
                   />
+                  <PropDoc
+                    name="icon"
+                    type="LucideIcon"
+                    description="Custom Lucide icon to display in overlay (default: Lock)"
+                  />
                 </div>
               </div>
 
@@ -423,6 +428,39 @@ export function LockedFeature() {
                     name="errorMessage"
                     type="string"
                     description="Default error message to display on failure"
+                  />
+                  <PropDoc
+                    name="secondaryLabel"
+                    type="string"
+                    description="Text for the secondary action button"
+                  />
+                  <PropDoc
+                    name="secondaryPendingLabel"
+                    type="string"
+                    defaultValue='"Working..."'
+                    description="Text shown during secondary action async operation"
+                  />
+                </div>
+              </div>
+
+              {/* Secondary Actions */}
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Secondary Actions</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="onSecondaryConfirm"
+                    type="() => Promise<void> | void"
+                    description="Async function called when user clicks secondary action button"
+                  />
+                  <PropDoc
+                    name="onSecondaryConfirmError"
+                    type="(error: unknown) => void"
+                    description="Callback fired when secondary action fails"
+                  />
+                  <PropDoc
+                    name="onSecondaryConfirmFinally"
+                    type='(result: "success" | "error") => void'
+                    description="Callback fired after secondary action completes (success or error)"
                   />
                 </div>
               </div>
@@ -562,6 +600,37 @@ export function LockedFeature() {
                 />
               </div>
 
+              {/* Secondary Action Button */}
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Secondary Action Button</h3>
+                <p className="text-muted-foreground mb-4">
+                  Add a secondary button for alternative actions like "Learn More" or "Contact Sales":
+                </p>
+                <CodeBlock
+                  index={9}
+                  type="advanced_secondary_action"
+                  code={`<BlurWrapper
+  isBlurred={locked}
+  overlayMode="dialog"
+  dialogTitle="Upgrade to Pro"
+  dialogDescription="Unlock advanced features and premium support"
+  confirmLabel="Start Free Trial"
+  secondaryLabel="Learn More"
+  onConfirm={async () => {
+    await startTrial()
+    setLocked(false)
+  }}
+  onSecondaryConfirm={async () => {
+    // Open documentation or pricing page
+    window.open("/pricing", "_blank")
+  }}
+  onUnblur={() => setLocked(false)}
+>
+  <PremiumFeatureContent />
+</BlurWrapper>`}
+                />
+              </div>
+
               {/* Multiple Locked Sections */}
               <div>
                 <h3 className="text-xl font-semibold mb-3">Multiple Independent Sections</h3>
@@ -569,7 +638,7 @@ export function LockedFeature() {
                   Each section can be unlocked independently with its own state:
                 </p>
                 <CodeBlock
-                  index={5}
+                  index={10}
                   type="advanced_multiple_sections"
                   code={`export function Dashboard() {
   const [analyticsLocked, setAnalyticsLocked] = useState(true)
@@ -619,7 +688,7 @@ export function LockedFeature() {
                 <h3 className="text-xl font-semibold mb-3">Controlled Overlay State</h3>
                 <p className="text-muted-foreground mb-4">Control when the overlay appears for custom flows:</p>
                 <CodeBlock
-                  index={6}
+                  index={11}
                   type="advanced_controlled_state"
                   code={`export function ControlledExample() {
   const [locked, setLocked] = useState(true)
@@ -701,7 +770,7 @@ export function LockedFeature() {
                   If you see "Cannot find module" errors, verify your tsconfig.json has correct path aliases:
                 </p>
                 <CodeBlock
-                  index={7}
+                  index={12}
                   type="troubleshooting_imports"
                   code={`{
   "compilerOptions": {
@@ -719,7 +788,7 @@ export function LockedFeature() {
                   Ensure your content has a non-transparent background. The blur effect works by filtering the content:
                 </p>
                 <CodeBlock
-                  index={8}
+                  index={13}
                   type="troubleshooting_blur"
                   code={`<BlurWrapper isBlurred={locked}>
   <div className="bg-white dark:bg-slate-900 p-6 rounded-lg">
