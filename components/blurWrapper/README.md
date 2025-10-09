@@ -25,7 +25,7 @@ See [root README](../../README.md) for project overview and registry information
 
 ### Basic Dialog Mode
 
-\`\`\`tsx
+```tsx
 const [locked, setLocked] = useState(true)
 
 <BlurWrapper
@@ -37,11 +37,11 @@ const [locked, setLocked] = useState(true)
 >
   <PremiumFeature />
 </BlurWrapper>
-\`\`\`
+```
 
 ### Basic Inline Mode
 
-\`\`\`tsx
+```tsx
 const [locked, setLocked] = useState(true)
 
 <BlurWrapper
@@ -55,13 +55,13 @@ const [locked, setLocked] = useState(true)
 >
   <PremiumFeature />
 </BlurWrapper>
-\`\`\`
+```
 
 ### Custom Overlay with Error Handling
 
 Use the render-prop `overlay` to get full control over the UI with `{ isPending, error, confirm, resetError, registerErrorRef }`.
 
-\`\`\`tsx
+```tsx
 <BlurWrapper
   isBlurred={locked}
   overlayMode="inline"
@@ -87,11 +87,11 @@ Use the render-prop `overlay` to get full control over the UI with `{ isPending,
 >
   <LockedContent />
 </BlurWrapper>
-\`\`\`
+```
 
 ### Multiple Independent Sections
 
-\`\`\`tsx
+```tsx
 export function Dashboard() {
   const [analyticsLocked, setAnalyticsLocked] = useState(true)
   const [reportsLocked, setReportsLocked] = useState(true)
@@ -116,11 +116,11 @@ export function Dashboard() {
     </div>
   )
 }
-\`\`\`
+```
 
 ### Secondary Action Button
 
-\`\`\`tsx
+```tsx
 import { Sparkles } from "lucide-react"
 
 <BlurWrapper
@@ -141,7 +141,7 @@ import { Sparkles } from "lucide-react"
 >
   <PremiumFeature />
 </BlurWrapper>
-\`\`\`
+```
 
 ---
 

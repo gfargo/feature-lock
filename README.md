@@ -53,13 +53,13 @@ The flagship component that **blurs locked features and guides users to upgrade�
 
 #### Quick Start
 
-\`\`\`bash
+```bash
 npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper
-\`\`\`
+```
 
 #### Basic Usage
 
-\`\`\`tsx
+```tsx
 import { useState } from "react"
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
 
@@ -81,7 +81,7 @@ export function LockedFeature() {
     </BlurWrapper>
   )
 }
-\`\`\`
+```
 
 [**View Full BlurWrapper Documentation →**](#blurwrapper-documentation)
 
@@ -100,17 +100,17 @@ export function LockedFeature() {
 
 Make sure you have a Next.js project with shadcn/ui set up:
 
-\`\`\`bash
+```bash
 npx shadcn@latest init
-\`\`\`
+```
 
 ### Installation
 
 Install the BlurWrapper component:
 
-\`\`\`bash
+```bash
 npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper
-\`\`\`
+```
 
 This installs:
 - BlurWrapper component
@@ -119,7 +119,7 @@ This installs:
 
 ### Your First Feature Lock
 
-\`\`\`tsx
+```tsx
 import { useState } from "react"
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
 
@@ -140,7 +140,7 @@ export function Dashboard() {
     </BlurWrapper>
   )
 }
-\`\`\`
+```
 
 ---
 
@@ -258,7 +258,7 @@ Check out our [**Contributing Guide →**](./CONTRIBUTING.md)
 
 ### Development Setup
 
-\`\`\`bash
+```bash
 # Clone the repo
 git clone https://github.com/gfargo/feature-lock.git
 cd feature-lock
@@ -271,7 +271,7 @@ npm run dev
 
 # Generate registry
 npm run gen:registry
-\`\`\`
+```
 
 ---
 
@@ -280,7 +280,7 @@ npm run gen:registry
 ### Import Errors
 
 Verify your `tsconfig.json`:
-\`\`\`json
+```json
 {
   "compilerOptions": {
     "paths": {
@@ -288,30 +288,30 @@ Verify your `tsconfig.json`:
     }
   }
 }
-\`\`\`
+```
 
 ### Blur Not Visible
 
 Ensure content has non-transparent background:
-\`\`\`tsx
+```tsx
 <BlurWrapper isBlurred={locked}>
   <div className="bg-white dark:bg-slate-900">
     {/* Content */}
   </div>
 </BlurWrapper>
-\`\`\`
+```
 
 ### Overlay Not Showing
 
 Check that `showOverlayOnBlur` is not `false`:
-\`\`\`tsx
+```tsx
 <BlurWrapper
   isBlurred={locked}
   showOverlayOnBlur={true} // Default
 >
   <Content />
 </BlurWrapper>
-\`\`\`
+```
 
 [**View Full Troubleshooting Guide →**](https://feature-lock.griffen.codes/docs#troubleshooting)
 
