@@ -1,0 +1,16 @@
+{
+  "registry": [
+    {
+      "name": "blur-wrapper",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/blur-wrapper",
+      "file": "r/blur-wrapper.json",
+      "type": "registry:ui"
+    },
+    {
+      "name": "blur-wrapper-full",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/blur-wrapper-full",
+      "file": "r/blur-wrapper-full.json",
+      "type": "registry:ui"
+    }
+  ]
+}

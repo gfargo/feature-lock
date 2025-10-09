@@ -154,6 +154,8 @@ export function Dashboard() {
 ### ⚡ Key Features
 
 - **Async-Ready**: Built with React 19's `useTransition` for seamless async operations
+- **Secondary Actions**: Optional secondary button for "Learn More" or "Contact Sales" actions
+- **Custom Icons**: Replace the default Lock icon with any Lucide icon
 - **Accessible by Default**: Focus blocking with `inert`, screen reader announcements, error focus management
 - **Flexible Positioning**: 9 position options for inline overlays
 - **Custom Overlays**: Full control with render props

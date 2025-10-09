@@ -1,0 +1,30 @@
+{
+  "name": "blur-wrapper-full",
+  "type": "registry:ui",
+  "dependencies": [
+    "react@^19.0.0",
+    "lucide-react@^0.454.0",
+    "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.3.1",
+    "@radix-ui/react-dialog@1.1.4"
+  ],
+  "registryDependencies": [
+    "button",
+    "dialog"
+  ],
+  "files": [
+    {
+      "type": "registry:doc",
+      "path": "components/blurWrapper/README.md",
+      "target": "@/components/blurWrapper/README.md",
+      "content": ""
+    },
+    {
+      "type": "registry:lib",
+      "path": "components/blurWrapper/blur-wrapper.tsx",
+      "target": "@/components/blurWrapper/blur-wrapper.tsx",
+      "content": ""
+    }
+  ]
+}

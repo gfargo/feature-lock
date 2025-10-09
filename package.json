@@ -5,9 +5,11 @@
   "scripts": {
     "prebuild": "npm run gen:registry",
     "build": "next build",
+    "predev": "npm run gen:registry",
     "dev": "next dev",
     "gen:registry": "node scripts/gen-registry.mjs",
     "lint": "next lint",
+    "postinstall": "npm run gen:registry",
     "start": "next start"
   },
   "dependencies": {
