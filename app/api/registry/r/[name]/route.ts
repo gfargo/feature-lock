@@ -3,6 +3,13 @@ import { track } from "@vercel/analytics/server"
 import fs from "fs"
 import path from "path"
 
+type RegistryFile = {
+  type: string
+  path: string
+  target: string
+  content?: string
+}
+
 export async function GET(request: NextRequest, context: { params: Promise<{ name: string }> }) {
   try {
     const { name } = await context.params
@@ -40,10 +47,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ nam
       return NextResponse.json({ error: `Component '${sanitizedName}' not found` }, { status: 404 })
     }
 
-    const componentData = JSON.parse(fs.readFileSync(componentPath, "utf-8"))
+    const componentData = JSON.parse(fs.readFileSync(componentPath, "utf-8")) as {
+      files: RegistryFile[]
+      [key: string]: unknown
+    }
 
     // Populate file contents
-    const populatedFiles = componentData.files.map((file: any) => {
+    const populatedFiles = componentData.files.map((file) => {
       const sourcePath = path.join(process.cwd(), file.path)
       let content = ""
 

@@ -1,0 +1,23 @@
+{
+  "name": "paywall-banner",
+  "type": "registry:ui",
+  "dependencies": [
+    "react@^19.0.0",
+    "lucide-react@^0.454.0",
+    "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.3.1"
+  ],
+  "registryDependencies": [
+    "button",
+    "badge"
+  ],
+  "files": [
+    {
+      "type": "registry:lib",
+      "path": "components/paywallBanner/paywall-banner.tsx",
+      "target": "@/components/paywallBanner/paywall-banner.tsx",
+      "content": ""
+    }
+  ]
+}

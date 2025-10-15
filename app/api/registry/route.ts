@@ -6,7 +6,6 @@ import path from "path"
 export async function GET(request: Request) {
   try {
     // Track registry manifest requests
-    const url = new URL(request.url)
     const userAgent = request.headers.get("user-agent") || "unknown"
 
     await track("registry_manifest_requested", {

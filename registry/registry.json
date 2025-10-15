@@ -11,6 +11,18 @@
       "item": "https://feature-lock.griffen.codes/api/registry/r/blur-wrapper-full",
       "file": "r/blur-wrapper-full.json",
       "type": "registry:ui"
+    },
+    {
+      "name": "paywall-banner",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/paywall-banner",
+      "file": "r/paywall-banner.json",
+      "type": "registry:ui"
+    },
+    {
+      "name": "paywall-banner-full",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/paywall-banner-full",
+      "file": "r/paywall-banner-full.json",
+      "type": "registry:ui"
     }
   ]
 }

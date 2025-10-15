@@ -55,6 +55,31 @@ export default {
       ],
       exclude: [],
       registryDependencies: ["button", "dialog"],
-    }
+    },
+    {
+      name: "paywall-banner",
+      fileName: "paywall-banner.json",
+      type: "registry:ui",
+      dependencies: {},
+      include: [
+        /^components\/paywallBanner\/paywall-banner\.tsx$/,
+      ],
+      exclude: [
+        /^components\/paywallBanner\/README\.md$/,
+      ],
+      registryDependencies: ["button", "badge"],
+    },
+    {
+      name: "paywall-banner-full",
+      fileName: "paywall-banner-full.json",
+      type: "registry:ui",
+      dependencies: {},
+      include: [
+        /^components\/paywallBanner\/paywall-banner\.tsx$/,
+        /^components\/paywallBanner\/README\.md$/,
+      ],
+      exclude: [],
+      registryDependencies: ["button", "badge"],
+    },
   ],
 };

@@ -7,6 +7,7 @@ import { ArrowLeft, Check, Copy, Terminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 export default function DocsPage() {
   const [copiedIndex, setCopiedIndex] = React.useState<number | null>(null)
@@ -45,7 +46,14 @@ export default function DocsPage() {
     type?: string
   }) => (
     <div className="relative group">
-      <pre className="bg-muted border border-primary/10 rounded-lg p-4 overflow-x-auto text-sm">
+      <pre
+        data-language={language}
+        className={cn(
+          "bg-muted border border-primary/10 rounded-lg p-4 overflow-x-auto text-sm",
+          `language-${language}`,
+        )}
+        aria-label={`${language} code snippet`}
+      >
         <code className="text-foreground">{code}</code>
       </pre>
       <Button
@@ -124,7 +132,7 @@ export default function DocsPage() {
                 Documentation
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Complete guide to installing and using BlurWrapper in your Next.js project
+                Complete guide to installing BlurWrapper and PaywallBanner in your Next.js project
               </p>
             </div>
 
@@ -150,7 +158,7 @@ export default function DocsPage() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Installation
               </h2>
-              <p className="text-muted-foreground">Add BlurWrapper to your project in seconds</p>
+              <p className="text-muted-foreground">Add Feature Lock components to your project in seconds</p>
             </div>
 
             <div className="space-y-4">
@@ -162,55 +170,85 @@ export default function DocsPage() {
                 <InstallCommand command="npx shadcn@latest init" index={0} />
               </div>
 
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Install BlurWrapper</h3>
-                <p className="text-muted-foreground mb-4">
-                  Run the following command to install the component and its dependencies:
-                </p>
-                <InstallCommand
-                  command="npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper"
-                  index={1}
-                />
-              </div>
+              <Tabs
+                defaultValue="blur-wrapper"
+                className="w-full"
+                onValueChange={(value) => track("docs_install_tab_changed", { component: value })}
+              >
+                <TabsList className="grid w-full grid-cols-2 max-w-md">
+                  <TabsTrigger value="blur-wrapper">BlurWrapper</TabsTrigger>
+                  <TabsTrigger value="paywall-banner">PaywallBanner</TabsTrigger>
+                </TabsList>
 
-              <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
-                <ul className="space-y-1 text-sm text-muted-foreground">
-                  <li>• BlurWrapper component at @/components/blurWrapper/blur-wrapper</li>
-                  <li>• Required shadcn/ui components (Button, Dialog)</li>
-                  <li>• All necessary peer dependencies (@radix-ui/react-dialog, lucide-react)</li>
-                </ul>
-              </div>
+                <TabsContent value="blur-wrapper" className="space-y-4 pt-4">
+                  <p className="text-muted-foreground">
+                    Run the following command to install the BlurWrapper component and its dependencies:
+                  </p>
+                  <InstallCommand
+                    command="npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper"
+                    index={1}
+                  />
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• BlurWrapper component at @/components/blurWrapper/blur-wrapper</li>
+                      <li>• Required shadcn/ui components (Button, Dialog)</li>
+                      <li>• All necessary peer dependencies (@radix-ui/react-dialog, lucide-react)</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="paywall-banner" className="space-y-4 pt-4">
+                  <p className="text-muted-foreground">
+                    Prefer a lightweight announcement experience? Install PaywallBanner with this command:
+                  </p>
+                  <InstallCommand
+                    command="npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner"
+                    index={5}
+                  />
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• PaywallBanner component at @/components/paywallBanner/paywall-banner</li>
+                      <li>• Required shadcn/ui components (Button, Badge)</li>
+                      <li>• lucide-react icons for the default announcement glyphs</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           </section>
 
           {/* Quick Start */}
-          <section className="space-y-6">
+          <section className="space-y-8">
             <div>
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Quick Start
               </h2>
-              <p className="text-muted-foreground">Get up and running in minutes</p>
+              <p className="text-muted-foreground">Get up and running in minutes with BlurWrapper and PaywallBanner</p>
             </div>
 
-            <Tabs
-              defaultValue="dialog"
-              className="w-full"
-              onValueChange={(value) => track("docs_tab_changed", { tab: value })}
-            >
-              <TabsList className="grid w-full grid-cols-2 max-w-md">
-                <TabsTrigger value="dialog">Dialog Mode</TabsTrigger>
-                <TabsTrigger value="inline">Inline Mode</TabsTrigger>
-              </TabsList>
+            <div className="space-y-12">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">BlurWrapper</h3>
+                <Tabs
+                  defaultValue="dialog"
+                  className="w-full"
+                  onValueChange={(value) => track("docs_quickstart_tab_changed", { tab: value })}
+                >
+                  <TabsList className="grid w-full grid-cols-2 max-w-md">
+                    <TabsTrigger value="dialog">Dialog Mode</TabsTrigger>
+                    <TabsTrigger value="inline">Inline Mode</TabsTrigger>
+                  </TabsList>
 
-              <TabsContent value="dialog" className="space-y-4">
-                <p className="text-muted-foreground">
-                  Dialog mode shows the upgrade prompt in a modal overlay—great for critical actions:
-                </p>
-                <CodeBlock
-                  index={2}
-                  type="quickstart_dialog"
-                  code={`"use client"
+                  <TabsContent value="dialog" className="space-y-4">
+                    <p className="text-muted-foreground">
+                      Dialog mode shows the upgrade prompt in a modal overlay—great for critical actions:
+                    </p>
+                    <CodeBlock
+                      index={2}
+                      type="quickstart_dialog"
+                      code={`"use client"
 
 import { useState } from "react"
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
@@ -246,18 +284,18 @@ export function LockedFeature() {
     </BlurWrapper>
   )
 }`}
-                />
-              </TabsContent>
+                    />
+                  </TabsContent>
 
-              <TabsContent value="inline" className="space-y-4">
-                <p className="text-muted-foreground">
-                  Inline mode displays the upgrade prompt directly over the locked content—perfect for contextual
-                  upsells:
-                </p>
-                <CodeBlock
-                  index={3}
-                  type="quickstart_inline"
-                  code={`"use client"
+                  <TabsContent value="inline" className="space-y-4">
+                    <p className="text-muted-foreground">
+                      Inline mode displays the upgrade prompt directly over the locked content—perfect for contextual
+                      upsells:
+                    </p>
+                    <CodeBlock
+                      index={3}
+                      type="quickstart_inline"
+                      code={`"use client"
 
 import { useState } from "react"
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
@@ -292,18 +330,74 @@ export function LockedFeature() {
     </BlurWrapper>
   )
 }`}
+                    />
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">PaywallBanner</h3>
+                <p className="text-muted-foreground">
+                  Add a dismissible announcement banner that respects user intent and keeps upgrade pathways visible:
+                </p>
+                <CodeBlock
+                  index={6}
+                  type="quickstart_paywall_banner"
+                  code={`"use client"
+
+import { useState } from "react"
+import { PaywallBanner } from "@/components/paywallBanner/paywall-banner"
+
+export function LaunchAnnouncement() {
+  const [open, setOpen] = useState(true)
+
+  async function handleTrial() {
+    const response = await fetch("/api/trials", { method: "POST" })
+    if (!response.ok) throw new Error("Unable to start trial")
+  }
+
+  return (
+    <PaywallBanner
+      open={open}
+      onOpenChange={setOpen}
+      variant="upgrade"
+      badge="New feature"
+      title="Workflow automation just shipped"
+      description="Upgrade to the Scale plan to unlock automated handoffs, SLAs, and export scheduling."
+      storageKey="workflow-automation-banner"
+      ctaLabel="Start trial"
+      ctaPendingLabel="Launching..."
+      onCtaClick={handleTrial}
+      onCtaSuccess={() => setOpen(false)}
+      onCtaError={(error) => console.error(error)}
+      secondaryLabel="Read release notes"
+      secondaryHref="/changelog#workflow-automation"
+    />
+  )
+}`}
                 />
-              </TabsContent>
-            </Tabs>
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-2 text-sm text-muted-foreground">
+                  <p>Pro tips:</p>
+                  <ul className="space-y-1 pl-4 list-disc">
+                    <li>Use <code>storageKey</code> to persist dismissals across sessions.</li>
+                    <li>Leverage <code>onCtaClick</code> and <code>onCtaError</code> for async upgrade flows.</li>
+                    <li>
+                      Swap <code>variant</code> between <code>&quot;upgrade&quot;</code>, <code>&quot;info&quot;</code>,{" "}
+                      <code>&quot;success&quot;</code>, and <code>&quot;warning&quot;</code>.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </section>
 
-          {/* API Reference */}
+          {/* BlurWrapper API */}
           <section className="space-y-6">
             <div>
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
-                API Reference
+                BlurWrapper API
               </h2>
-              <p className="text-muted-foreground">Complete prop reference and TypeScript types</p>
+              <p className="text-muted-foreground">Complete prop reference and TypeScript types for BlurWrapper</p>
             </div>
 
             <div className="space-y-8">
@@ -604,7 +698,8 @@ export function LockedFeature() {
               <div>
                 <h3 className="text-xl font-semibold mb-3">Secondary Action Button</h3>
                 <p className="text-muted-foreground mb-4">
-                  Add a secondary button for alternative actions like "Learn More" or "Contact Sales":
+                  Add a secondary button for alternative actions like &ldquo;Learn More&rdquo; or &ldquo;Contact
+                  Sales&rdquo;:
                 </p>
                 <CodeBlock
                   index={9}
@@ -720,6 +815,173 @@ export function LockedFeature() {
             </div>
           </section>
 
+          {/* PaywallBanner API */}
+          <section className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                PaywallBanner API
+              </h2>
+              <p className="text-muted-foreground">Key props for the announcement banner component</p>
+            </div>
+
+            <div className="space-y-8">
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Core Props</h3>
+                <div className="space-y-4">
+                  <PropDoc name="title" type="string" description="Primary headline for the announcement banner" />
+                  <PropDoc
+                    name="description"
+                    type="string"
+                    description="Supporting copy displayed under the title"
+                  />
+                  <PropDoc
+                    name="badge"
+                    type="string | null"
+                    defaultValue='"New"'
+                    description="Optional badge label; set to null to hide"
+                  />
+                  <PropDoc
+                    name="variant"
+                    type='"upgrade" | "info" | "success" | "warning"'
+                    defaultValue='"upgrade"'
+                    description="Determines accent styling for the banner"
+                  />
+                  <PropDoc
+                    name="dismissible"
+                    type="boolean"
+                    defaultValue="true"
+                    description="Controls whether the close button is rendered"
+                  />
+                  <PropDoc
+                    name="storageKey"
+                    type="string"
+                    description="Persist dismissals in localStorage using this key"
+                  />
+                  <PropDoc
+                    name="defaultOpen"
+                    type="boolean"
+                    defaultValue="true"
+                    description="Initial visibility when the component is uncontrolled"
+                  />
+                  <PropDoc
+                    name="open"
+                    type="boolean"
+                    description="Controlled visibility state for the banner"
+                  />
+                  <PropDoc
+                    name="onOpenChange"
+                    type="(open: boolean) => void"
+                    description="Callback fired whenever visibility changes"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                  <h3 className="text-xl font-semibold mb-4">Primary Action</h3>
+                  <div className="space-y-4">
+                    <PropDoc
+                      name="ctaLabel"
+                      type="string"
+                      defaultValue='"Upgrade now"'
+                      description="Text for the primary button"
+                    />
+                    <PropDoc
+                      name="ctaHref"
+                      type="string"
+                      description="Link target when no onCtaClick handler is provided"
+                    />
+                    <PropDoc
+                      name="onCtaClick"
+                      type="() => Promise<void> | void"
+                      description="Async handler for the primary action"
+                    />
+                    <PropDoc
+                      name="ctaPendingLabel"
+                      type="string"
+                      defaultValue='"Working..."'
+                      description="Text shown while onCtaClick resolves"
+                    />
+                    <PropDoc
+                      name="onCtaSuccess"
+                      type="() => void"
+                      description="Called after onCtaClick resolves without error"
+                    />
+                    <PropDoc
+                      name="onCtaError"
+                      type="(error: unknown) => void"
+                      description="Called when onCtaClick throws or rejects"
+                    />
+                  </div>
+                </div>
+
+                <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                  <h3 className="text-xl font-semibold mb-4">Secondary &amp; Dismiss</h3>
+                  <div className="space-y-4">
+                    <PropDoc
+                      name="secondaryLabel"
+                      type="string"
+                      description="Text for the optional secondary button"
+                    />
+                    <PropDoc
+                      name="secondaryHref"
+                      type="string"
+                      description="Link target when no onSecondaryClick handler is provided"
+                    />
+                    <PropDoc
+                      name="onSecondaryClick"
+                      type="() => Promise<void> | void"
+                      description="Async handler for the secondary action"
+                    />
+                    <PropDoc
+                      name="onSecondarySuccess"
+                      type="() => void"
+                      description="Called after onSecondaryClick resolves without error"
+                    />
+                    <PropDoc
+                      name="onSecondaryError"
+                      type="(error: unknown) => void"
+                      description="Called when the secondary handler throws or rejects"
+                    />
+                    <PropDoc name="onDismiss" type="() => void" description="Fired when the banner is dismissed" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Layout &amp; Content</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="showDivider"
+                    type="boolean"
+                    defaultValue="false"
+                    description="Adds a divider between content and actions on larger screens"
+                  />
+                  <PropDoc
+                    name="className"
+                    type="string"
+                    description="Custom classes for the banner container"
+                  />
+                  <PropDoc
+                    name="contentClassName"
+                    type="string"
+                    description="Custom classes for the text/content column"
+                  />
+                  <PropDoc
+                    name="actionsClassName"
+                    type="string"
+                    description="Custom classes for the action button container"
+                  />
+                  <PropDoc
+                    name="children"
+                    type="React.ReactNode"
+                    description="Optional additional content (e.g. bullet lists or disclaimers)"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Best Practices */}
           <section className="space-y-6">
             <div>
@@ -736,13 +998,14 @@ export function LockedFeature() {
                   <li>• Use dialog mode for critical upgrade decisions</li>
                   <li>• Use inline mode for contextual feature teasers</li>
                   <li>• Provide clear value propositions in overlay content</li>
+                  <li>• Persist dismissals with PaywallBanner storage keys to respect user intent</li>
                   <li>• Handle async errors gracefully</li>
                   <li>• Test with keyboard navigation and screen readers</li>
                 </ul>
               </div>
 
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                <h3 className="font-semibold mb-2">❌ Don't</h3>
+                <h3 className="font-semibold mb-2">❌ Don&apos;t</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   <li>• Lock too many features at once</li>
                   <li>• Use aggressive blur that makes content unrecognizable</li>
@@ -767,7 +1030,7 @@ export function LockedFeature() {
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">Import errors</h3>
                 <p className="text-sm text-muted-foreground mb-2">
-                  If you see "Cannot find module" errors, verify your tsconfig.json has correct path aliases:
+                  If you see &ldquo;Cannot find module&rdquo; errors, verify your tsconfig.json has correct path aliases:
                 </p>
                 <CodeBlock
                   index={12}
@@ -801,15 +1064,15 @@ export function LockedFeature() {
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">Overlay not showing</h3>
                 <p className="text-sm text-muted-foreground">
-                  By default, the overlay shows automatically when isBlurred is true. If it's not appearing, check that
-                  showOverlayOnBlur is not set to false.
+                  By default, the overlay shows automatically when isBlurred is true. If it&apos;s not appearing, check
+                  that showOverlayOnBlur is not set to false.
                 </p>
               </div>
 
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">TypeScript errors</h3>
                 <p className="text-sm text-muted-foreground">
-                  Make sure you're using TypeScript 5+ and have proper type definitions installed. The component is
+                  Make sure you&apos;re using TypeScript 5+ and have proper type definitions installed. The component is
                   fully typed with TypeScript.
                 </p>
               </div>

@@ -2,8 +2,10 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { track } from "@vercel/analytics"
 import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
+import { PaywallBanner } from "@/components/paywallBanner/paywall-banner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -14,6 +16,8 @@ import { AlertCircle, Loader2, Lock, ArrowRight, Sparkles, BookOpen } from "luci
 import { cn } from "@/lib/utils"
 
 export default function Page() {
+  const router = useRouter()
+  const [bannerOpen, setBannerOpen] = React.useState(true)
   const [analyticsBlurred, setAnalyticsBlurred] = React.useState(true)
   const [billingBlurred, setBillingBlurred] = React.useState(true)
   const [reportsBlurred, setReportsBlurred] = React.useState(true)
@@ -39,6 +43,15 @@ export default function Page() {
   const fakeUpgradeSometimes = async () => {
     await wait(1200)
     if (Math.random() < 0.6) throw new Error("Payment authorization failed. Please try again.")
+  }
+  const handleBannerInstall = async () => {
+    track("home_banner_install_clicked")
+    await wait(900)
+    track("home_banner_install_completed")
+  }
+  const handleBannerReset = () => {
+    setBannerOpen(true)
+    track("home_banner_reset")
   }
 
   // Track page view
@@ -93,6 +106,56 @@ export default function Page() {
               </a>
             </div>
           </header>
+
+          <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/60 backdrop-blur-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                  Announce features without hard paywalls
+                </h2>
+                <p className="text-muted-foreground">
+                  PaywallBanner helps you highlight launches and upgrades while letting users dismiss messaging when
+                  they are not ready yet.
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleBannerReset}
+                disabled={bannerOpen}
+                className="self-start md:self-auto"
+              >
+                Reset banner
+              </Button>
+            </div>
+
+            <PaywallBanner
+              open={bannerOpen}
+              onOpenChange={setBannerOpen}
+              badge="New component"
+              title="PaywallBanner is now in the registry"
+              description="Install the dismissible announcement banner to highlight launches, quota warnings, and upgrade paths across your product."
+              ctaLabel="Install instantly"
+              ctaPendingLabel="Copying command..."
+              onCtaClick={handleBannerInstall}
+              onCtaSuccess={() => track("home_banner_install_success")}
+              onCtaError={() => track("home_banner_install_error")}
+              secondaryLabel="View docs"
+              onSecondaryClick={() => {
+                track("home_banner_docs_clicked")
+                router.push("/docs#paywall-banner")
+              }}
+              onDismiss={() => {
+                track("home_banner_dismissed")
+              }}
+              showDivider
+            >
+              <ul className="list-disc pl-4 space-y-1">
+                <li>Persist dismissals with <code>storageKey</code> when you re-launch the banner.</li>
+                <li>Run async upgrade flows with built-in pending and error states.</li>
+              </ul>
+            </PaywallBanner>
+          </section>
 
           {/* Interactive Demo Controls */}
           <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm">
@@ -332,7 +395,8 @@ export default function Page() {
               <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                 <h3 className="font-semibold mb-2">⚡ Async-ready</h3>
                 <p className="text-muted-foreground text-sm">
-                  Handle upgrade flows with React 19's useTransition—pending states, error handling, focus management.
+                  Handle upgrade flows with React 19&rsquo;s useTransition—pending states, error handling, focus
+                  management.
                 </p>
               </div>
               <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
