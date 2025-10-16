@@ -137,5 +137,32 @@ export default {
       exclude: [],
       registryDependencies: ["button", "badge"],
     },
+    {
+      name: "usage-progress",
+      fileName: "usage-progress.json",
+      type: "registry:ui",
+      dependencies: {},
+      include: [
+        /^components\/usageProgress\/usage-progress\.tsx$/,
+        /^components\/usageProgress\/usage-progress-bar\.tsx$/,
+      ],
+      exclude: [
+        /^components\/usageProgress\/README\.md$/,
+      ],
+      registryDependencies: ["button", "badge"],
+    },
+    {
+      name: "usage-progress-full",
+      fileName: "usage-progress-full.json",
+      type: "registry:ui",
+      dependencies: {},
+      include: [
+        /^components\/usageProgress\/usage-progress\.tsx$/,
+        /^components\/usageProgress\/usage-progress-bar\.tsx$/,
+        /^components\/usageProgress\/README\.md$/,
+      ],
+      exclude: [],
+      registryDependencies: ["button", "badge"],
+    },
   ],
 };

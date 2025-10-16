@@ -128,9 +128,23 @@ Install directly:
 npx shadcn@latest add https://feature-lock.griffen.codes/r/upgrade-modal
 ```
 
+### UsageProgress
+
+Quota dashboards that show consumption trends, warn before limits, and route users to upgrade flows.
+
+- Per-track badges, trend arrows, and progress bars
+- Summary banner with plan unlock messaging and CTA row
+- Async upgrade handler with error feedback and secondary actions
+
+Add it to your project:
+
+```bash
+npx shadcn@latest add https://feature-lock.griffen.codes/r/usage-progress
+```
+
 ### Coming Soon
 
-- **UsageProgress** - Visual quota indicators with upgrade CTAs
+- **More components** - Additional monetization patterns coming soon
 
 ---
 
@@ -261,7 +275,7 @@ Feature Lock components are distributed via a ShadcnUI-compatible registry. This
 | PaywallBanner | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner` |
 | FeatureTooltip | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip` |
 | UpgradeModal | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/upgrade-modal` |
-| UsageProgress | 🚧 Coming Soon | - |
+| UsageProgress | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/usage-progress` |
 
 ### Registry API
 
@@ -391,6 +405,7 @@ See [LICENSE](./LICENSE) for details.
 - ✅ PaywallBanner component
 - ✅ FeatureTooltip component
 - ✅ UpgradeModal component
+- ✅ UsageProgress component
 - ✅ Dialog and inline modes
 - ✅ Async handling with useTransition
 - ✅ Full accessibility support
@@ -403,7 +418,6 @@ See [LICENSE](./LICENSE) for details.
 - 🚧 Animation customization
 
 ### Future (v2.0)
-- 🔮 UsageProgress component
 - 🔮 Internationalization (i18n)
 - 🔮 Vue and Svelte versions
 - 🔮 Storybook documentation

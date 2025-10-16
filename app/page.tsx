@@ -16,6 +16,7 @@ import { AlertCircle, Loader2, Lock, ArrowRight, Sparkles, BookOpen, BarChart3, 
 import { cn } from "@/lib/utils"
 import { FeatureTooltip } from "@/components/featureTooltip/feature-tooltip"
 import { UpgradeModal } from "@/components/upgradeModal/upgrade-modal"
+import { UsageProgress } from "@/components/usageProgress/usage-progress"
 
 export default function Page() {
   const router = useRouter()
@@ -60,6 +61,11 @@ export default function Page() {
     track("home_tooltip_upgrade_clicked", { feature })
     await wait(1000)
     track("home_tooltip_upgrade_completed", { feature })
+  }
+  const handleUsageUpgrade = async () => {
+    track("home_usage_upgrade_clicked")
+    await wait(900)
+    track("home_usage_upgrade_completed")
   }
 
   // Track page view
@@ -180,6 +186,34 @@ export default function Page() {
     },
   ] as const
 
+  const usageTracks = [
+    {
+      label: "API requests",
+      value: 92_300,
+      limit: 100_000,
+      status: "warning" as const,
+      badge: "92% used",
+      description: "Scale plan adds 500k requests / month",
+      trend: "up" as const,
+    },
+    {
+      label: "Workspace seats",
+      value: 28,
+      limit: 30,
+      status: "critical" as const,
+      badge: "2 remaining",
+      trend: "steady" as const,
+    },
+    {
+      label: "Scheduled exports",
+      value: 12,
+      limit: 20,
+      status: "ok" as const,
+      badge: "60% used",
+      trend: "down" as const,
+    },
+  ]
+
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
       <div className="p-8 pb-20 gap-16 sm:p-20">
@@ -203,7 +237,7 @@ export default function Page() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-2 text-xs font-medium text-primary">
-              {["BlurWrapper", "PaywallBanner", "FeatureTooltip", "UpgradeModal"].map((label) => (
+              {["BlurWrapper", "PaywallBanner", "FeatureTooltip", "UpgradeModal", "UsageProgress"].map((label) => (
                 <span
                   key={label}
                   className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary"
@@ -248,7 +282,7 @@ export default function Page() {
                 Install only what you need—or compose all four components for a complete upgrade experience.
               </p>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               <div className="rounded-2xl border border-primary/15 bg-card/80 p-5 shadow-sm">
                 <h3 className="text-lg font-semibold text-foreground">BlurWrapper</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
@@ -289,6 +323,17 @@ export default function Page() {
                 </p>
                 <Link href="/docs#upgrade-modal">
                   <Button variant="ghost" className="mt-4 px-0 text-primary hover:text-primary/80" onClick={() => track("home_summary_modal_docs_clicked")}>
+                    View docs
+                  </Button>
+                </Link>
+              </div>
+              <div className="rounded-2xl border border-primary/15 bg-card/80 p-5 shadow-sm">
+                <h3 className="text-lg font-semibold text-foreground">UsageProgress</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Visualize quotas, warn before limits, and funnel users toward the right upgrade flow.
+                </p>
+                <Link href="/docs#usage-progress">
+                  <Button variant="ghost" className="mt-4 px-0 text-primary hover:text-primary/80" onClick={() => track("home_summary_usage_docs_clicked")}>
                     View docs
                   </Button>
                 </Link>
@@ -478,6 +523,56 @@ export default function Page() {
               supportEmail="sales@feature-lock.dev"
               onPlanSelected={(planId) => track("home_upgrade_modal_plan_selected", { planId })}
               plans={upgradePlans}
+            />
+          </section>
+
+          {/* Usage Progress */}
+          <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                  UsageProgress · Keep quotas healthy
+                </h2>
+                <p className="text-muted-foreground">
+                  Show customers where they stand, warn before they hit limits, and highlight the value of upgrading.
+                </p>
+              </div>
+              <Link href="/docs#usage-progress">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="self-start md:self-auto"
+                  onClick={() => track("home_usage_docs_clicked")}
+                >
+                  View docs
+                </Button>
+              </Link>
+            </div>
+
+            <UsageProgress
+              tracks={usageTracks}
+              summaryValue="Scale plan unlocks 500k requests & 100 seats"
+              summaryMessage="Never hit a quota surprise. Unlock higher limits and priority support."
+              ctaLabel="Upgrade usage"
+              onCtaClick={handleUsageUpgrade}
+              secondaryLabel="Contact sales"
+              onSecondaryClick={() => {
+                track("home_usage_contact_sales")
+                window.open("mailto:sales@feature-lock.dev", "_blank")
+              }}
+              note="Quotas reset on May 1. Upgrading keeps existing data intact."
+              footer={
+                <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                  <span>Need custom limits?</span>
+                  <a
+                    href="https://feature-lock.griffen.codes/contact"
+                    className="text-primary hover:text-primary/80 underline underline-offset-4"
+                    onClick={() => track("home_usage_footer_contact")}
+                  >
+                    Talk to sales
+                  </a>
+                </div>
+              }
             />
           </section>
 
