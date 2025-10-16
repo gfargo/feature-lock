@@ -1,0 +1,30 @@
+{
+  "name": "upgrade-modal-full",
+  "type": "registry:ui",
+  "dependencies": [
+    "react@^19.0.0",
+    "lucide-react@^0.454.0",
+    "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.3.1",
+    "@radix-ui/react-dialog@1.1.4"
+  ],
+  "registryDependencies": [
+    "button",
+    "badge"
+  ],
+  "files": [
+    {
+      "type": "registry:doc",
+      "path": "components/upgradeModal/README.md",
+      "target": "@/components/upgradeModal/README.md",
+      "content": ""
+    },
+    {
+      "type": "registry:lib",
+      "path": "components/upgradeModal/upgrade-modal.tsx",
+      "target": "@/components/upgradeModal/upgrade-modal.tsx",
+      "content": ""
+    }
+  ]
+}

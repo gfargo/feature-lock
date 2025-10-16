@@ -35,6 +35,18 @@
       "item": "https://feature-lock.griffen.codes/api/registry/r/feature-tooltip-full",
       "file": "r/feature-tooltip-full.json",
       "type": "registry:ui"
+    },
+    {
+      "name": "upgrade-modal",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/upgrade-modal",
+      "file": "r/upgrade-modal.json",
+      "type": "registry:ui"
+    },
+    {
+      "name": "upgrade-modal-full",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/upgrade-modal-full",
+      "file": "r/upgrade-modal-full.json",
+      "type": "registry:ui"
     }
   ]
 }

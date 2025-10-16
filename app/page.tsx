@@ -15,10 +15,12 @@ import { Input } from "@/components/ui/input"
 import { AlertCircle, Loader2, Lock, ArrowRight, Sparkles, BookOpen, BarChart3, Crown, Gauge } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FeatureTooltip } from "@/components/featureTooltip/feature-tooltip"
+import { UpgradeModal } from "@/components/upgradeModal/upgrade-modal"
 
 export default function Page() {
   const router = useRouter()
   const [bannerOpen, setBannerOpen] = React.useState(true)
+  const [upgradeModalOpen, setUpgradeModalOpen] = React.useState(false)
   const [analyticsBlurred, setAnalyticsBlurred] = React.useState(true)
   const [billingBlurred, setBillingBlurred] = React.useState(true)
   const [reportsBlurred, setReportsBlurred] = React.useState(true)
@@ -104,6 +106,77 @@ export default function Page() {
       },
       triggerLabel: "Executive dashboard",
       TriggerIcon: Gauge,
+    },
+  ] as const
+
+  const upgradePlans = [
+    {
+      id: "growth",
+      name: "Growth",
+      description: "Unlock team-wide automation, analytics, and quota extensions.",
+      price: "$79",
+      period: "month",
+      highlight: "Everything in Starter, plus",
+      features: [
+        "Unlimited dashboards",
+        "Team benchmarks & leaderboards",
+        { label: "Priority support", footnote: "Responses within 1 business day" },
+      ],
+      ctaLabel: "Upgrade to Growth",
+      ctaPendingLabel: "Launching checkout...",
+      onSelect: async () => {
+        track("home_upgrade_modal_plan_checkout_started", { planId: "growth" })
+        await fakeUpgradeSometimes()
+        track("home_upgrade_modal_plan_checkout_completed", { planId: "growth" })
+      },
+      onSelectError: (error) => {
+        track("home_upgrade_modal_plan_checkout_failed", {
+          planId: "growth",
+          message: error instanceof Error ? error.message : String(error),
+        })
+      },
+    },
+    {
+      id: "scale",
+      name: "Scale",
+      badge: "Most popular",
+      recommended: true,
+      description: "AI forecasts, role-based permissions, and guided onboarding.",
+      price: "$129",
+      period: "month",
+      highlight: "Built for rapidly scaling product teams",
+      features: [
+        "AI churn & expansion forecasts",
+        { label: "Advanced roles & permissions", footnote: "Segment access by workspace" },
+        "Dedicated onboarding manager",
+      ],
+      ctaLabel: "Talk to sales",
+      ctaHref: "https://feature-lock.griffen.codes/contact",
+      onSelect: async () => {
+        track("home_upgrade_modal_plan_checkout_started", { planId: "scale" })
+        await wait(900)
+        track("home_upgrade_modal_plan_checkout_completed", { planId: "scale" })
+        window.open("https://feature-lock.griffen.codes/contact", "_blank", "noopener,noreferrer")
+      },
+    },
+    {
+      id: "enterprise",
+      name: "Enterprise",
+      description: "Custom security reviews, data residency options, and success planning.",
+      price: "Custom",
+      highlight: "Tailored deployment with white-glove support",
+      features: [
+        "SOC2 reports & security reviews",
+        { label: "Customer success workshops", footnote: "Quarterly roadmap reviews" },
+        "On-prem & regional data residency",
+      ],
+      ctaLabel: "Request enterprise demo",
+      ctaPendingLabel: "Scheduling...",
+      onSelect: async () => {
+        track("home_upgrade_modal_plan_checkout_started", { planId: "enterprise" })
+        await wait(1200)
+        track("home_upgrade_modal_plan_checkout_completed", { planId: "enterprise" })
+      },
     },
   ] as const
 
@@ -290,6 +363,54 @@ export default function Page() {
                 )
               })}
             </div>
+          </section>
+
+          {/* Upgrade Modal */}
+          <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                  Compare plans without leaving the page
+                </h2>
+                <p className="text-muted-foreground">
+                  UpgradeModal packs a full pricing comparison into a single, focused dialog.
+                </p>
+              </div>
+              <Link href="/docs#upgrade-modal">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="self-start md:self-auto"
+                  onClick={() => track("home_upgrade_modal_docs_clicked")}
+                >
+                  View docs
+                </Button>
+              </Link>
+            </div>
+
+            <UpgradeModal
+              trigger={
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+                  onClick={() => {
+                    track("home_upgrade_modal_trigger_clicked")
+                  }}
+                >
+                  View plans
+                </Button>
+              }
+              open={upgradeModalOpen}
+              onOpenChange={(next) => {
+                setUpgradeModalOpen(next)
+                track(next ? "home_upgrade_modal_opened" : "home_upgrade_modal_closed")
+              }}
+              subtitle="Scale your monetization strategy"
+              finePrint="Prices shown in USD. Cancel anytime during the billing cycle."
+              supportEmail="sales@feature-lock.dev"
+              onPlanSelected={(planId) => track("home_upgrade_modal_plan_selected", { planId })}
+              plans={upgradePlans}
+            />
           </section>
 
           {/* Demo Cards */}

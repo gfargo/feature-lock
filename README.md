@@ -114,9 +114,22 @@ Install it with one command:
 npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip
 ```
 
+### UpgradeModal
+
+Standalone upgrade dialog that compares plans, highlights value props, and routes users to checkout flows.
+
+- Supports async CTAs and links per plan with pending/error states
+- Automatically adapts layout for one, two, or three plan offerings
+- Includes fine print, support contact callout, and recommended badge styling
+
+Install directly:
+
+```bash
+npx shadcn@latest add https://feature-lock.griffen.codes/r/upgrade-modal
+```
+
 ### Coming Soon
 
-- **UpgradeModal** - Standalone upgrade dialog with plan comparison
 - **UsageProgress** - Visual quota indicators with upgrade CTAs
 
 ---
@@ -247,7 +260,7 @@ Feature Lock components are distributed via a ShadcnUI-compatible registry. This
 | BlurWrapper | ✅ Stable | `npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper` |
 | PaywallBanner | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner` |
 | FeatureTooltip | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip` |
-| UpgradeModal | 🚧 Coming Soon | - |
+| UpgradeModal | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/upgrade-modal` |
 | UsageProgress | 🚧 Coming Soon | - |
 
 ### Registry API
@@ -377,6 +390,7 @@ See [LICENSE](./LICENSE) for details.
 - ✅ BlurWrapper component
 - ✅ PaywallBanner component
 - ✅ FeatureTooltip component
+- ✅ UpgradeModal component
 - ✅ Dialog and inline modes
 - ✅ Async handling with useTransition
 - ✅ Full accessibility support
@@ -385,7 +399,6 @@ See [LICENSE](./LICENSE) for details.
 - ✅ Analytics integration
 
 ### Coming Soon (v1.1)
-- 🚧 UpgradeModal component
 - 🚧 Additional positioning options
 - 🚧 Animation customization
 

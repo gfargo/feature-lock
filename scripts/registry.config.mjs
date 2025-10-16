@@ -108,5 +108,34 @@ export default {
       exclude: [],
       registryDependencies: ["button", "badge"],
     },
+    {
+      name: "upgrade-modal",
+      fileName: "upgrade-modal.json",
+      type: "registry:ui",
+      dependencies: {
+        "@radix-ui/react-dialog": "1.1.4",
+      },
+      include: [
+        /^components\/upgradeModal\/upgrade-modal\.tsx$/,
+      ],
+      exclude: [
+        /^components\/upgradeModal\/README\.md$/,
+      ],
+      registryDependencies: ["button", "badge"],
+    },
+    {
+      name: "upgrade-modal-full",
+      fileName: "upgrade-modal-full.json",
+      type: "registry:ui",
+      dependencies: {
+        "@radix-ui/react-dialog": "1.1.4",
+      },
+      include: [
+        /^components\/upgradeModal\/upgrade-modal\.tsx$/,
+        /^components\/upgradeModal\/README\.md$/,
+      ],
+      exclude: [],
+      registryDependencies: ["button", "badge"],
+    },
   ],
 };
