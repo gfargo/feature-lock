@@ -1,47 +1,69 @@
 "use client";
 
 import * as React from "react";
-import { track } from "@vercel/analytics";
-import BlurWrapper from "@/components/blurWrapper/blur-wrapper";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { track } from "@vercel/analytics"
+import BlurWrapper from "@/components/blurWrapper/blur-wrapper"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { AlertCircle, Loader2, Lock } from "lucide-react";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/card"
+import { AlertCircle, Loader2, Lock } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function BlurWrapperShowcase() {
-  const [analyticsBlurred, setAnalyticsBlurred] = React.useState(true);
-  const [billingBlurred, setBillingBlurred] = React.useState(true);
-  const [reportsBlurred, setReportsBlurred] = React.useState(true);
-  const allBlurred = analyticsBlurred && billingBlurred && reportsBlurred;
-  const [billingError, setBillingError] = React.useState<Error | null>(null);
+  const [analyticsBlurred, setAnalyticsBlurred] = React.useState(true)
+  const [billingBlurred, setBillingBlurred] = React.useState(true)
+  const [reportsBlurred, setReportsBlurred] = React.useState(true)
+  const [billingError, setBillingError] = React.useState<Error | null>(null)
+  const [analyticsOverlayReady, setAnalyticsOverlayReady] = React.useState(false)
+  const analyticsCardRef = React.useRef<HTMLDivElement | null>(null)
+  const allBlurred = analyticsBlurred && billingBlurred && reportsBlurred
 
   const handleToggleAll = (checked: boolean) => {
-    setAnalyticsBlurred(checked);
-    setBillingBlurred(checked);
-    setReportsBlurred(checked);
-    track("demo_toggle_all", { blurred: checked });
-  };
+    setAnalyticsBlurred(checked)
+    setBillingBlurred(checked)
+    setReportsBlurred(checked)
+    track("demo_toggle_all", { blurred: checked })
+  }
 
   const fakeUpgradeOk = async () => {
-    await wait(2000);
-  };
+    await wait(2000)
+  }
   const fakeUpgradeSometimes = async () => {
-    await wait(1200);
-    if (Math.random() < 0.6)
-      throw new Error("Payment authorization failed. Please try again.");
-  };
+    await wait(1200)
+    if (Math.random() < 0.6) throw new Error("Payment authorization failed. Please try again.")
+  }
+
+  React.useEffect(() => {
+    const cardEl = analyticsCardRef.current
+    if (!cardEl) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio === 1) {
+            setAnalyticsOverlayReady(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 1 },
+    )
+
+    observer.observe(cardEl)
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <>
@@ -73,7 +95,7 @@ export function BlurWrapperShowcase() {
         </div>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-3">
-          <Card className="border-primary/10 bg-card/50 backdrop-blur-sm">
+          <Card ref={analyticsCardRef} className="border-primary/10 bg-card/50 backdrop-blur-sm">
             <CardHeader className="flex-row items-center justify-between">
               <div>
                 <CardTitle>Team Analytics</CardTitle>
@@ -104,12 +126,13 @@ export function BlurWrapperShowcase() {
                 dialogDescription="Upgrade or contact your admin to request access."
                 confirmLabel="Upgrade now"
                 pendingLabel="Upgrading..."
+                showOverlayOnBlur={analyticsOverlayReady}
                 onConfirm={async () => {
-                  await fakeUpgradeOk();
-                  track("demo_section_unlocked", { section: "analytics" });
+                  await fakeUpgradeOk()
+                  track("demo_section_unlocked", { section: "analytics" })
                 }}
                 onUnblur={() => {
-                  setAnalyticsBlurred(false);
+                  setAnalyticsBlurred(false)
                 }}
               >
                 <div className="grid gap-4">
