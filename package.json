@@ -11,7 +11,9 @@
     "lint": "next lint",
     "postinstall": "npm run gen:registry",
     "start": "next start",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:registry": "node scripts/test-registry.mjs",
+    "test:registry:api": "node scripts/test-registry-api.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

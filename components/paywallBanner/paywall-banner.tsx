@@ -230,7 +230,7 @@ export const PaywallBanner = React.forwardRef<HTMLDivElement, PaywallBannerProps
 
           <div
             className={cn(
-              "flex w-full flex-col gap-2 border-t border-primary/10 pt-4 md:w-auto md:flex-shrink-0 md:flex-row md:items-center md:gap-3 md:border-0 md:pt-0",
+              "flex w-full flex-col gap-2 border-t border-primary/10 pt-4 pr-8 md:w-auto md:flex-shrink-0 md:flex-row md:items-center md:gap-3 md:border-0 md:pt-0",
               showDivider && "md:border-l md:pl-4",
               actionsClassName,
             )}
