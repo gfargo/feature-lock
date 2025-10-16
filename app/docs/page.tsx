@@ -585,11 +585,11 @@ export default function DocsPage() {
                   </li>
                   <li>
                     <code>percentage</code> (number): Override percentage when no limit applies.
-                    <code>status</code> controls styling (<code>"ok"</code>, <code>"warning"</code>, <code>"critical"</code>).
+                    <code>status</code> controls styling (<code>&quot;ok&quot;</code>, <code>&quot;warning&quot;</code>, <code>&quot;critical&quot;</code>).
                   </li>
                   <li>
-                    Optional fields: <code>badge</code>, <code>trend</code> (<code>"up"</code>, <code>"down"</code>,
-                    <code>"steady"</code>), <code>description</code>. They reinforce messaging without clutter.
+                    Optional fields: <code>badge</code>, <code>trend</code> (<code>&quot;up&quot;</code>, <code>&quot;down&quot;</code>,
+                    <code>&quot;steady&quot;</code>), <code>description</code>. They reinforce messaging without clutter.
                   </li>
                 </ul>
               </div>
