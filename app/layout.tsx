@@ -6,27 +6,39 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "BlurWrapper - Contextual Feature Locking for React",
+  title: "Feature Lock – Upgrade-ready React components",
   description:
-    "A flexible React component that blurs locked features and guides users to upgrade without breaking their flow. Built with Next.js, TypeScript, and shadcn/ui.",
-  keywords: ["react", "nextjs", "component", "blur", "paywall", "feature-locking", "upgrade", "shadcn", "typescript"],
+    "Feature Lock is a suite of React components for feature gating and monetization, including BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress.",
+  keywords: [
+    "feature lock",
+    "react",
+    "nextjs",
+    "component",
+    "monetization",
+    "blur",
+    "paywall",
+    "tooltip",
+    "upgrade",
+    "shadcn",
+    "typescript",
+  ],
   authors: [{ name: "Griffen Labs" }],
   openGraph: {
-    title: "BlurWrapper - Contextual Feature Locking for React",
+    title: "Feature Lock – Upgrade-ready React components",
     description:
-      "A flexible React component that blurs locked features and guides users to upgrade without breaking their flow.",
+      "Feature Lock delivers BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress to help teams convert users without disrupting their flow.",
     url: "https://feature-lock.griffen.codes",
-    siteName: "BlurWrapper",
+    siteName: "Feature Lock",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BlurWrapper - Contextual Feature Locking for React",
+    title: "Feature Lock – Upgrade-ready React components",
     description:
-      "A flexible React component that blurs locked features and guides users to upgrade without breaking their flow.",
+      "Feature Lock bundles BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress for contextual upsells and quotas.",
   },
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export default function RootLayout({

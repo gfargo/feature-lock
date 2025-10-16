@@ -1,38 +1,38 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { track } from "@vercel/analytics"
-import { ArrowLeft, Check, Copy, Terminal } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import Link from "next/link";
+import { track } from "@vercel/analytics";
+import { ArrowLeft, Check, Copy, Terminal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export default function DocsPage() {
-  const [copiedIndex, setCopiedIndex] = React.useState<number | null>(null)
+  const [copiedIndex, setCopiedIndex] = React.useState<number | null>(null);
 
   const copyToClipboard = (text: string, index: number, type: string) => {
-    navigator.clipboard.writeText(text)
-    setCopiedIndex(index)
-    setTimeout(() => setCopiedIndex(null), 2000)
+    navigator.clipboard.writeText(text);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
 
     // Track code snippet copies (CONVERSION GOAL - engagement)
     track("code_copied", {
       type,
       snippet_index: index,
-    })
-  }
+    });
+  };
 
   const handleInstallCommandCopy = (command: string, index: number) => {
-    copyToClipboard(command, index, "install_command")
+    copyToClipboard(command, index, "install_command");
 
     // Track installation intent (CONVERSION GOAL)
     track("install_command_copied", {
       command,
       timestamp: new Date().toISOString(),
-    })
-  }
+    });
+  };
 
   const CodeBlock = ({
     code,
@@ -40,17 +40,17 @@ export default function DocsPage() {
     index,
     type = "code",
   }: {
-    code: string
-    language?: string
-    index: number
-    type?: string
+    code: string;
+    language?: string;
+    index: number;
+    type?: string;
   }) => (
     <div className="relative group">
       <pre
         data-language={language}
         className={cn(
           "bg-muted border border-primary/10 rounded-lg p-4 overflow-x-auto text-sm",
-          `language-${language}`,
+          `language-${language}`
         )}
         aria-label={`${language} code snippet`}
       >
@@ -62,12 +62,22 @@ export default function DocsPage() {
         className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
         onClick={() => copyToClipboard(code, index, type)}
       >
-        {copiedIndex === index ? <Check className="size-4" /> : <Copy className="size-4" />}
+        {copiedIndex === index ? (
+          <Check className="size-4" />
+        ) : (
+          <Copy className="size-4" />
+        )}
       </Button>
     </div>
-  )
+  );
 
-  const InstallCommand = ({ command, index }: { command: string; index: number }) => (
+  const InstallCommand = ({
+    command,
+    index,
+  }: {
+    command: string;
+    index: number;
+  }) => (
     <div className="relative group">
       <div className="flex items-center gap-3 bg-muted border border-primary/10 rounded-lg p-4">
         <Terminal className="size-4 text-primary flex-shrink-0" />
@@ -78,37 +88,44 @@ export default function DocsPage() {
           className="opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={() => handleInstallCommandCopy(command, index)}
         >
-          {copiedIndex === index ? <Check className="size-4" /> : <Copy className="size-4" />}
+          {copiedIndex === index ? (
+            <Check className="size-4" />
+          ) : (
+            <Copy className="size-4" />
+          )}
         </Button>
       </div>
     </div>
-  )
+  );
 
   // Track page view
   React.useEffect(() => {
-    track("docs_viewed")
-  }, [])
+    track("docs_viewed");
+  }, []);
 
   // Track scroll depth (CONVERSION GOAL - engagement)
   React.useEffect(() => {
-    let maxScrollDepth = 0
+    let maxScrollDepth = 0;
     const handleScroll = () => {
-      const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+      const scrollPercentage =
+        (window.scrollY /
+          (document.documentElement.scrollHeight - window.innerHeight)) *
+        100;
       if (scrollPercentage > maxScrollDepth) {
-        maxScrollDepth = scrollPercentage
+        maxScrollDepth = scrollPercentage;
         if (maxScrollDepth >= 25 && maxScrollDepth < 50) {
-          track("docs_scroll_25")
+          track("docs_scroll_25");
         } else if (maxScrollDepth >= 50 && maxScrollDepth < 75) {
-          track("docs_scroll_50")
+          track("docs_scroll_50");
         } else if (maxScrollDepth >= 75) {
-          track("docs_scroll_75")
+          track("docs_scroll_75");
         }
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
@@ -116,38 +133,54 @@ export default function DocsPage() {
         <div className="mx-auto max-w-5xl space-y-12">
           {/* Header */}
           <header className="space-y-6">
-            <Link href="/">
-              <Button
-                variant="ghost"
-                className="-ml-4 text-primary hover:text-primary/80 hover:bg-primary/5"
-                onClick={() => track("docs_back_clicked")}
+            <Button
+              variant="ghost"
+              className="-ml-4 text-primary hover:text-primary/80 hover:bg-primary/5 mb-6"
+              onClick={() => track("docs_back_clicked")}
+              asChild
+            >
+              <Link
+                href="/"
               >
                 <ArrowLeft className="mr-2 size-4" />
                 Back to home
-              </Button>
-            </Link>
+              </Link>
+            </Button>
 
             <div>
               <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent mb-4">
                 Documentation
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Complete guide to installing BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress
-                in your Next.js project
+                Complete guide to installing BlurWrapper, PaywallBanner,
+                FeatureTooltip, UpgradeModal, and UsageProgress in your Next.js
+                project
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" className="border-primary/20">
+              <Badge
+                variant="outline"
+                className="border-primary/20"
+              >
                 React 19
               </Badge>
-              <Badge variant="outline" className="border-primary/20">
+              <Badge
+                variant="outline"
+                className="border-primary/20"
+              >
                 Next.js 14+
               </Badge>
-              <Badge variant="outline" className="border-primary/20">
+              <Badge
+                variant="outline"
+                className="border-primary/20"
+              >
                 TypeScript
               </Badge>
-              <Badge variant="outline" className="border-primary/20">
+              <Badge
+                variant="outline"
+                className="border-primary/20"
+              >
                 shadcn/ui
               </Badge>
             </div>
@@ -159,86 +192,138 @@ export default function DocsPage() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Installation
               </h2>
-              <p className="text-muted-foreground">Add Feature Lock components to your project in seconds</p>
+              <p className="text-muted-foreground">
+                Add Feature Lock components to your project in seconds
+              </p>
             </div>
 
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-semibold mb-3">Prerequisites</h3>
                 <p className="text-muted-foreground mb-4">
-                  Make sure you have a Next.js project with shadcn/ui set up. If not, initialize it first:
+                  Make sure you have a Next.js project with shadcn/ui set up. If
+                  not, initialize it first:
                 </p>
-                <InstallCommand command="npx shadcn@latest init" index={0} />
+                <InstallCommand
+                  command="npx shadcn@latest init"
+                  index={0}
+                />
               </div>
 
               <Tabs
                 defaultValue="blur-wrapper"
                 className="w-full"
-                onValueChange={(value) => track("docs_install_tab_changed", { component: value })}
+                onValueChange={(value) =>
+                  track("docs_install_tab_changed", { component: value })
+                }
               >
                 <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 max-w-4xl">
                   <TabsTrigger value="blur-wrapper">BlurWrapper</TabsTrigger>
-                  <TabsTrigger value="paywall-banner">PaywallBanner</TabsTrigger>
-                  <TabsTrigger value="feature-tooltip">FeatureTooltip</TabsTrigger>
+                  <TabsTrigger value="paywall-banner">
+                    PaywallBanner
+                  </TabsTrigger>
+                  <TabsTrigger value="feature-tooltip">
+                    FeatureTooltip
+                  </TabsTrigger>
                   <TabsTrigger value="upgrade-modal">UpgradeModal</TabsTrigger>
-                  <TabsTrigger value="usage-progress">UsageProgress</TabsTrigger>
+                  <TabsTrigger value="usage-progress">
+                    UsageProgress
+                  </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="blur-wrapper" className="space-y-4 pt-4">
+                <TabsContent
+                  value="blur-wrapper"
+                  className="space-y-4 pt-4"
+                >
                   <p className="text-muted-foreground">
-                    Run the following command to install the BlurWrapper component and its dependencies:
+                    Run the following command to install the BlurWrapper
+                    component and its dependencies:
                   </p>
                   <InstallCommand
                     command="npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper"
                     index={1}
                   />
                   <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <h4 className="font-semibold mb-2">
+                      ✨ What gets installed?
+                    </h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• BlurWrapper component at @/components/blurWrapper/blur-wrapper</li>
+                      <li>
+                        • BlurWrapper component at
+                        @/components/blurWrapper/blur-wrapper
+                      </li>
                       <li>• Required shadcn/ui components (Button, Dialog)</li>
-                      <li>• All necessary peer dependencies (@radix-ui/react-dialog, lucide-react)</li>
+                      <li>
+                        • All necessary peer dependencies
+                        (@radix-ui/react-dialog, lucide-react)
+                      </li>
                     </ul>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="paywall-banner" className="space-y-4 pt-4">
+                <TabsContent
+                  value="paywall-banner"
+                  className="space-y-4 pt-4"
+                >
                   <p className="text-muted-foreground">
-                    Prefer a lightweight announcement experience? Install PaywallBanner with this command:
+                    Prefer a lightweight announcement experience? Install
+                    PaywallBanner with this command:
                   </p>
                   <InstallCommand
                     command="npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner"
                     index={5}
                   />
                   <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <h4 className="font-semibold mb-2">
+                      ✨ What gets installed?
+                    </h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• PaywallBanner component at @/components/paywallBanner/paywall-banner</li>
+                      <li>
+                        • PaywallBanner component at
+                        @/components/paywallBanner/paywall-banner
+                      </li>
                       <li>• Required shadcn/ui components (Button, Badge)</li>
-                      <li>• lucide-react icons for the default announcement glyphs</li>
+                      <li>
+                        • lucide-react icons for the default announcement glyphs
+                      </li>
                     </ul>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="feature-tooltip" className="space-y-4 pt-4">
+                <TabsContent
+                  value="feature-tooltip"
+                  className="space-y-4 pt-4"
+                >
                   <p className="text-muted-foreground">
-                    Need subtle inline upsells? FeatureTooltip installs with this command:
+                    Need subtle inline upsells? FeatureTooltip installs with
+                    this command:
                   </p>
                   <InstallCommand
                     command="npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip"
                     index={7}
                   />
                   <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <h4 className="font-semibold mb-2">
+                      ✨ What gets installed?
+                    </h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• FeatureTooltip component at @/components/featureTooltip/feature-tooltip</li>
+                      <li>
+                        • FeatureTooltip component at
+                        @/components/featureTooltip/feature-tooltip
+                      </li>
                       <li>• Tooltip UI primitive at @/components/ui/tooltip</li>
-                      <li>• lucide-react icons for the default lock/highlight styles</li>
+                      <li>
+                        • lucide-react icons for the default lock/highlight
+                        styles
+                      </li>
                     </ul>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="upgrade-modal" className="space-y-4 pt-4">
+                <TabsContent
+                  value="upgrade-modal"
+                  className="space-y-4 pt-4"
+                >
                   <p className="text-muted-foreground">
                     Present a full plan comparison experience with UpgradeModal:
                   </p>
@@ -247,16 +332,29 @@ export default function DocsPage() {
                     index={14}
                   />
                   <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <h4 className="font-semibold mb-2">
+                      ✨ What gets installed?
+                    </h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• UpgradeModal component at @/components/upgradeModal/upgrade-modal</li>
-                      <li>• Reuses existing shadcn/ui dialog + button primitives</li>
-                      <li>• lucide-react icons for plan highlights & pending states</li>
+                      <li>
+                        • UpgradeModal component at
+                        @/components/upgradeModal/upgrade-modal
+                      </li>
+                      <li>
+                        • Reuses existing shadcn/ui dialog + button primitives
+                      </li>
+                      <li>
+                        • lucide-react icons for plan highlights & pending
+                        states
+                      </li>
                     </ul>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="usage-progress" className="space-y-4 pt-4">
+                <TabsContent
+                  value="usage-progress"
+                  className="space-y-4 pt-4"
+                >
                   <p className="text-muted-foreground">
                     Visualize quotas and drive upgrades with UsageProgress:
                   </p>
@@ -265,11 +363,22 @@ export default function DocsPage() {
                     index={16}
                   />
                   <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <h4 className="font-semibold mb-2">
+                      ✨ What gets installed?
+                    </h4>
                     <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• UsageProgress component at @/components/usageProgress/usage-progress</li>
-                      <li>• Shared progress bar helper at @/components/usageProgress/usage-progress-bar</li>
-                      <li>• No extra primitives needed—works with existing shadcn/ui buttons & badges</li>
+                      <li>
+                        • UsageProgress component at
+                        @/components/usageProgress/usage-progress
+                      </li>
+                      <li>
+                        • Shared progress bar helper at
+                        @/components/usageProgress/usage-progress-bar
+                      </li>
+                      <li>
+                        • No extra primitives needed—works with existing
+                        shadcn/ui buttons & badges
+                      </li>
                     </ul>
                   </div>
                 </TabsContent>
@@ -283,14 +392,20 @@ export default function DocsPage() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 UpgradeModal API
               </h2>
-              <p className="text-muted-foreground">Prop reference for the standalone upgrade dialog experience</p>
+              <p className="text-muted-foreground">
+                Prop reference for the standalone upgrade dialog experience
+              </p>
             </div>
 
             <div className="space-y-8">
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
                 <h3 className="text-xl font-semibold mb-4">Core Props</h3>
                 <div className="space-y-4">
-                  <PropDoc name="plans" type="UpgradePlan[]" description="Plan definitions rendered inside the modal" />
+                  <PropDoc
+                    name="plans"
+                    type="UpgradePlan[]"
+                    description="Plan definitions rendered inside the modal"
+                  />
                   <PropDoc
                     name="trigger"
                     type="React.ReactNode"
@@ -325,7 +440,9 @@ export default function DocsPage() {
               </div>
 
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                <h3 className="text-xl font-semibold mb-4">Content & Styling</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Content & Styling
+                </h3>
                 <div className="space-y-4">
                   <PropDoc
                     name="title"
@@ -333,7 +450,11 @@ export default function DocsPage() {
                     defaultValue='"Unlock more with Feature Lock"'
                     description="Modal heading shown at the top of the dialog"
                   />
-                  <PropDoc name="subtitle" type="string" description="Optional subheading styled in the primary color" />
+                  <PropDoc
+                    name="subtitle"
+                    type="string"
+                    description="Optional subheading styled in the primary color"
+                  />
                   <PropDoc
                     name="description"
                     type="string"
@@ -417,27 +538,34 @@ export default function DocsPage() {
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50 space-y-3">
                 <h3 className="text-xl font-semibold">UpgradePlan fields</h3>
                 <p className="text-sm text-muted-foreground">
-                  Each entry in <code>plans</code> accepts the following properties:
+                  Each entry in <code>plans</code> accepts the following
+                  properties:
                 </p>
                 <ul className="list-disc pl-6 space-y-1 text-sm text-muted-foreground">
                   <li>
-                    <code>id</code>: unique identifier used for analytics callbacks and pending/error state tracking.
+                    <code>id</code>: unique identifier used for analytics
+                    callbacks and pending/error state tracking.
                   </li>
                   <li>
-                    <code>name</code>, <code>description</code>, <code>price</code>, <code>period</code>, <code>badge</code>,
-                    <code>highlight</code>, <code>footnote</code>: text content for the plan card.
+                    <code>name</code>, <code>description</code>,{" "}
+                    <code>price</code>, <code>period</code>, <code>badge</code>,
+                    <code>highlight</code>, <code>footnote</code>: text content
+                    for the plan card.
                   </li>
                   <li>
-                    <code>features</code>: array of strings or <code>{`{ label, included?, footnote? }`}</code> objects to
+                    <code>features</code>: array of strings or{" "}
+                    <code>{`{ label, included?, footnote? }`}</code> objects to
                     render capability lists.
                   </li>
                   <li>
-                    <code>ctaLabel</code>, <code>ctaHref</code>, <code>ctaPendingLabel</code>: customize primary CTA text
-                    and link behavior.
+                    <code>ctaLabel</code>, <code>ctaHref</code>,{" "}
+                    <code>ctaPendingLabel</code>: customize primary CTA text and
+                    link behavior.
                   </li>
                   <li>
-                    <code>onSelect</code>, <code>onSelectSuccess</code>, <code>onSelectError</code>: async handler and hooks
-                    for custom upgrade flows.
+                    <code>onSelect</code>, <code>onSelectSuccess</code>,{" "}
+                    <code>onSelectError</code>: async handler and hooks for
+                    custom upgrade flows.
                   </li>
                 </ul>
               </div>
@@ -450,14 +578,20 @@ export default function DocsPage() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 UsageProgress API
               </h2>
-              <p className="text-muted-foreground">Props for the quota tracking component</p>
+              <p className="text-muted-foreground">
+                Props for the quota tracking component
+              </p>
             </div>
 
             <div className="space-y-8">
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
                 <h3 className="text-xl font-semibold mb-4">Core Props</h3>
                 <div className="space-y-4">
-                  <PropDoc name="tracks" type="UsageTrack[]" description="Usage rows displayed with progress bars" />
+                  <PropDoc
+                    name="tracks"
+                    type="UsageTrack[]"
+                    description="Usage rows displayed with progress bars"
+                  />
                   <PropDoc
                     name="variant"
                     type='"card" | "inline"'
@@ -498,7 +632,11 @@ export default function DocsPage() {
                     type="string"
                     description="Additional text under the summary label"
                   />
-                  <PropDoc name="note" type="string" description="Small note displayed alongside CTAs" />
+                  <PropDoc
+                    name="note"
+                    type="string"
+                    description="Small note displayed alongside CTAs"
+                  />
                   <PropDoc
                     name="className"
                     type="string"
@@ -580,16 +718,24 @@ export default function DocsPage() {
                 <h3 className="text-xl font-semibold">UsageTrack fields</h3>
                 <ul className="list-disc pl-6 space-y-1 text-sm text-muted-foreground">
                   <li>
-                    <code>label</code> (string): Display name for the quota. <code>value</code> (number) and
-                    <code>limit</code> (number) calculate percentages automatically.
+                    <code>label</code> (string): Display name for the quota.{" "}
+                    <code>value</code> (number) and
+                    <code>limit</code> (number) calculate percentages
+                    automatically.
                   </li>
                   <li>
-                    <code>percentage</code> (number): Override percentage when no limit applies.
-                    <code>status</code> controls styling (<code>&quot;ok&quot;</code>, <code>&quot;warning&quot;</code>, <code>&quot;critical&quot;</code>).
+                    <code>percentage</code> (number): Override percentage when
+                    no limit applies.
+                    <code>status</code> controls styling (
+                    <code>&quot;ok&quot;</code>,{" "}
+                    <code>&quot;warning&quot;</code>,{" "}
+                    <code>&quot;critical&quot;</code>).
                   </li>
                   <li>
-                    Optional fields: <code>badge</code>, <code>trend</code> (<code>&quot;up&quot;</code>, <code>&quot;down&quot;</code>,
-                    <code>&quot;steady&quot;</code>), <code>description</code>. They reinforce messaging without clutter.
+                    Optional fields: <code>badge</code>, <code>trend</code> (
+                    <code>&quot;up&quot;</code>, <code>&quot;down&quot;</code>,
+                    <code>&quot;steady&quot;</code>), <code>description</code>.
+                    They reinforce messaging without clutter.
                   </li>
                 </ul>
               </div>
@@ -603,26 +749,38 @@ export default function DocsPage() {
                 Quick Start
               </h2>
               <p className="text-muted-foreground">
-                Get up and running in minutes with BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress
+                Get up and running in minutes with BlurWrapper, PaywallBanner,
+                FeatureTooltip, UpgradeModal, and UsageProgress
               </p>
             </div>
 
             <div className="space-y-12">
               <div className="space-y-4">
-                <h3 id="blurwrapper" className="text-xl font-semibold">BlurWrapper</h3>
+                <h3
+                  id="blurwrapper"
+                  className="text-xl font-semibold"
+                >
+                  BlurWrapper
+                </h3>
                 <Tabs
                   defaultValue="dialog"
                   className="w-full"
-                  onValueChange={(value) => track("docs_quickstart_tab_changed", { tab: value })}
+                  onValueChange={(value) =>
+                    track("docs_quickstart_tab_changed", { tab: value })
+                  }
                 >
                   <TabsList className="grid w-full grid-cols-2 max-w-md">
                     <TabsTrigger value="dialog">Dialog Mode</TabsTrigger>
                     <TabsTrigger value="inline">Inline Mode</TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="dialog" className="space-y-4">
+                  <TabsContent
+                    value="dialog"
+                    className="space-y-4"
+                  >
                     <p className="text-muted-foreground">
-                      Dialog mode shows the upgrade prompt in a modal overlay—great for critical actions:
+                      Dialog mode shows the upgrade prompt in a modal
+                      overlay—great for critical actions:
                     </p>
                     <CodeBlock
                       index={2}
@@ -666,10 +824,13 @@ export function LockedFeature() {
                     />
                   </TabsContent>
 
-                  <TabsContent value="inline" className="space-y-4">
+                  <TabsContent
+                    value="inline"
+                    className="space-y-4"
+                  >
                     <p className="text-muted-foreground">
-                      Inline mode displays the upgrade prompt directly over the locked content—perfect for contextual
-                      upsells:
+                      Inline mode displays the upgrade prompt directly over the
+                      locked content—perfect for contextual upsells:
                     </p>
                     <CodeBlock
                       index={3}
@@ -715,9 +876,15 @@ export function LockedFeature() {
               </div>
 
               <div className="space-y-4">
-                <h3 id="paywall-banner" className="text-xl font-semibold">PaywallBanner</h3>
+                <h3
+                  id="paywall-banner"
+                  className="text-xl font-semibold"
+                >
+                  PaywallBanner
+                </h3>
                 <p className="text-muted-foreground">
-                  Add a dismissible announcement banner that respects user intent and keeps upgrade pathways visible:
+                  Add a dismissible announcement banner that respects user
+                  intent and keeps upgrade pathways visible:
                 </p>
                 <CodeBlock
                   index={6}
@@ -758,20 +925,35 @@ export function LaunchAnnouncement() {
                 <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-2 text-sm text-muted-foreground">
                   <p>Pro tips:</p>
                   <ul className="space-y-1 pl-4 list-disc">
-                    <li>Use <code>storageKey</code> to persist dismissals across sessions.</li>
-                    <li>Leverage <code>onCtaClick</code> and <code>onCtaError</code> for async upgrade flows.</li>
                     <li>
-                      Swap <code>variant</code> between <code>&quot;upgrade&quot;</code>, <code>&quot;info&quot;</code>,{" "}
-                      <code>&quot;success&quot;</code>, and <code>&quot;warning&quot;</code>.
+                      Use <code>storageKey</code> to persist dismissals across
+                      sessions.
+                    </li>
+                    <li>
+                      Leverage <code>onCtaClick</code> and{" "}
+                      <code>onCtaError</code> for async upgrade flows.
+                    </li>
+                    <li>
+                      Swap <code>variant</code> between{" "}
+                      <code>&quot;upgrade&quot;</code>,{" "}
+                      <code>&quot;info&quot;</code>,{" "}
+                      <code>&quot;success&quot;</code>, and{" "}
+                      <code>&quot;warning&quot;</code>.
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h3 id="feature-tooltip" className="text-xl font-semibold">FeatureTooltip</h3>
+                <h3
+                  id="feature-tooltip"
+                  className="text-xl font-semibold"
+                >
+                  FeatureTooltip
+                </h3>
                 <p className="text-muted-foreground">
-                  Surface inline upsells for disabled actions, icons, or compact UI without forcing a modal:
+                  Surface inline upsells for disabled actions, icons, or compact
+                  UI without forcing a modal:
                 </p>
                 <CodeBlock
                   index={8}
@@ -807,15 +989,23 @@ export function InlineUpsell() {
                   <ul className="space-y-1 pl-4 list-disc">
                     <li>Disabled buttons that require higher plans</li>
                     <li>Inline icons in tables or charts</li>
-                    <li>Feature flags where you still want to tease capabilities</li>
+                    <li>
+                      Feature flags where you still want to tease capabilities
+                    </li>
                   </ul>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h3 id="upgrade-modal" className="text-xl font-semibold">UpgradeModal</h3>
+                <h3
+                  id="upgrade-modal"
+                  className="text-xl font-semibold"
+                >
+                  UpgradeModal
+                </h3>
                 <p className="text-muted-foreground">
-                  Give users a full plan comparison without leaving the current surface:
+                  Give users a full plan comparison without leaving the current
+                  surface:
                 </p>
                 <CodeBlock
                   index={15}
@@ -880,17 +1070,32 @@ export function PlanComparison() {
                 <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-1 text-sm text-muted-foreground">
                   <p>Best practices:</p>
                   <ul className="space-y-1 pl-4 list-disc">
-                    <li>Use <code>onPlanSelected</code> to instrument analytics funnels.</li>
-                    <li>Set <code>autoCloseOnSelect</code> to <code>false</code> if you keep workflows inline.</li>
-                    <li>Pair with support email or footer CTA for enterprise outreach.</li>
+                    <li>
+                      Use <code>onPlanSelected</code> to instrument analytics
+                      funnels.
+                    </li>
+                    <li>
+                      Set <code>autoCloseOnSelect</code> to <code>false</code>{" "}
+                      if you keep workflows inline.
+                    </li>
+                    <li>
+                      Pair with support email or footer CTA for enterprise
+                      outreach.
+                    </li>
                   </ul>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h3 id="usage-progress" className="text-xl font-semibold">UsageProgress</h3>
+                <h3
+                  id="usage-progress"
+                  className="text-xl font-semibold"
+                >
+                  UsageProgress
+                </h3>
                 <p className="text-muted-foreground">
-                  Track quota consumption, warn before limits, and embed upgrade CTAs directly in your dashboards:
+                  Track quota consumption, warn before limits, and embed upgrade
+                  CTAs directly in your dashboards:
                 </p>
                 <CodeBlock
                   index={17}
@@ -955,7 +1160,9 @@ export function UsageOverview() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 BlurWrapper API
               </h2>
-              <p className="text-muted-foreground">Complete prop reference and TypeScript types for BlurWrapper</p>
+              <p className="text-muted-foreground">
+                Complete prop reference and TypeScript types for BlurWrapper
+              </p>
             </div>
 
             <div className="space-y-8">
@@ -990,7 +1197,9 @@ export function UsageOverview() {
 
               {/* Visual Props */}
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                <h3 className="text-xl font-semibold mb-4">Visual Customization</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Visual Customization
+                </h3>
                 <div className="space-y-4">
                   <PropDoc
                     name="blurIntensity"
@@ -1075,7 +1284,11 @@ export function UsageOverview() {
                     defaultValue='"Feature unavailable"'
                     description="Title for dialog mode overlay"
                   />
-                  <PropDoc name="dialogDescription" type="string" description="Description text for dialog mode" />
+                  <PropDoc
+                    name="dialogDescription"
+                    type="string"
+                    description="Description text for dialog mode"
+                  />
                   <PropDoc
                     name="errorMessage"
                     type="string"
@@ -1097,7 +1310,9 @@ export function UsageOverview() {
 
               {/* Secondary Actions */}
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                <h3 className="text-xl font-semibold mb-4">Secondary Actions</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Secondary Actions
+                </h3>
                 <div className="space-y-4">
                   <PropDoc
                     name="onSecondaryConfirm"
@@ -1188,15 +1403,20 @@ export function UsageOverview() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Advanced Examples
               </h2>
-              <p className="text-muted-foreground">Custom overlays and advanced patterns</p>
+              <p className="text-muted-foreground">
+                Custom overlays and advanced patterns
+              </p>
             </div>
 
             <div className="space-y-8">
               {/* Custom Overlay */}
               <div>
-                <h3 className="text-xl font-semibold mb-3">Custom Overlay with Error Handling</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Custom Overlay with Error Handling
+                </h3>
                 <p className="text-muted-foreground mb-4">
-                  Use the render-prop pattern for full control over overlay content and error handling:
+                  Use the render-prop pattern for full control over overlay
+                  content and error handling:
                 </p>
                 <CodeBlock
                   index={4}
@@ -1254,10 +1474,12 @@ export function UsageOverview() {
 
               {/* Secondary Action Button */}
               <div>
-                <h3 className="text-xl font-semibold mb-3">Secondary Action Button</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Secondary Action Button
+                </h3>
                 <p className="text-muted-foreground mb-4">
-                  Add a secondary button for alternative actions like &ldquo;Learn More&rdquo; or &ldquo;Contact
-                  Sales&rdquo;:
+                  Add a secondary button for alternative actions like
+                  &ldquo;Learn More&rdquo; or &ldquo;Contact Sales&rdquo;:
                 </p>
                 <CodeBlock
                   index={9}
@@ -1286,7 +1508,9 @@ export function UsageOverview() {
 
               {/* Multiple Locked Sections */}
               <div>
-                <h3 className="text-xl font-semibold mb-3">Multiple Independent Sections</h3>
+                <h3 className="text-xl font-semibold mb-3">
+                  Multiple Independent Sections
+                </h3>
                 <p className="text-muted-foreground mb-4">
                   Each section can be unlocked independently with its own state:
                 </p>
@@ -1338,8 +1562,12 @@ export function UsageOverview() {
 
               {/* Controlled State */}
               <div>
-                <h3 className="text-xl font-semibold mb-3">Controlled Overlay State</h3>
-                <p className="text-muted-foreground mb-4">Control when the overlay appears for custom flows:</p>
+                <h3 className="text-xl font-semibold mb-3">
+                  Controlled Overlay State
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  Control when the overlay appears for custom flows:
+                </p>
                 <CodeBlock
                   index={11}
                   type="advanced_controlled_state"
@@ -1379,14 +1607,20 @@ export function UsageOverview() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 PaywallBanner API
               </h2>
-              <p className="text-muted-foreground">Key props for the announcement banner component</p>
+              <p className="text-muted-foreground">
+                Key props for the announcement banner component
+              </p>
             </div>
 
             <div className="space-y-8">
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
                 <h3 className="text-xl font-semibold mb-4">Core Props</h3>
                 <div className="space-y-4">
-                  <PropDoc name="title" type="string" description="Primary headline for the announcement banner" />
+                  <PropDoc
+                    name="title"
+                    type="string"
+                    description="Primary headline for the announcement banner"
+                  />
                   <PropDoc
                     name="description"
                     type="string"
@@ -1474,7 +1708,9 @@ export function UsageOverview() {
                 </div>
 
                 <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                  <h3 className="text-xl font-semibold mb-4">Secondary &amp; Dismiss</h3>
+                  <h3 className="text-xl font-semibold mb-4">
+                    Secondary &amp; Dismiss
+                  </h3>
                   <div className="space-y-4">
                     <PropDoc
                       name="secondaryLabel"
@@ -1501,13 +1737,19 @@ export function UsageOverview() {
                       type="(error: unknown) => void"
                       description="Called when the secondary handler throws or rejects"
                     />
-                    <PropDoc name="onDismiss" type="() => void" description="Fired when the banner is dismissed" />
+                    <PropDoc
+                      name="onDismiss"
+                      type="() => void"
+                      description="Fired when the banner is dismissed"
+                    />
                   </div>
                 </div>
               </div>
 
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                <h3 className="text-xl font-semibold mb-4">Layout &amp; Content</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Layout &amp; Content
+                </h3>
                 <div className="space-y-4">
                   <PropDoc
                     name="showDivider"
@@ -1546,14 +1788,20 @@ export function UsageOverview() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 FeatureTooltip API
               </h2>
-              <p className="text-muted-foreground">Props for lightweight inline upgrade nudges</p>
+              <p className="text-muted-foreground">
+                Props for lightweight inline upgrade nudges
+              </p>
             </div>
 
             <div className="space-y-8">
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
                 <h3 className="text-xl font-semibold mb-4">Core Props</h3>
                 <div className="space-y-4">
-                  <PropDoc name="title" type="string" description="Headline displayed at the top of the tooltip" />
+                  <PropDoc
+                    name="title"
+                    type="string"
+                    description="Headline displayed at the top of the tooltip"
+                  />
                   <PropDoc
                     name="description"
                     type="string"
@@ -1586,11 +1834,13 @@ export function UsageOverview() {
               </div>
 
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                <h3 className="text-xl font-semibold mb-4">Highlights & Styling</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Highlights & Styling
+                </h3>
                 <div className="space-y-4">
                   <PropDoc
                     name="highlights"
-                    type='(string | { icon?: LucideIcon; label: string })[]'
+                    type="(string | { icon?: LucideIcon; label: string })[]"
                     description="List of feature value props shown as bullet items"
                   />
                   <PropDoc
@@ -1656,7 +1906,9 @@ export function UsageOverview() {
               </div>
 
               <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
-                <h3 className="text-xl font-semibold mb-4">Positioning & Control</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Positioning & Control
+                </h3>
                 <div className="space-y-4">
                   <PropDoc
                     name="side"
@@ -1708,7 +1960,9 @@ export function UsageOverview() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Best Practices
               </h2>
-              <p className="text-muted-foreground">Tips for optimal implementation</p>
+              <p className="text-muted-foreground">
+                Tips for optimal implementation
+              </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
@@ -1718,7 +1972,10 @@ export function UsageOverview() {
                   <li>• Use dialog mode for critical upgrade decisions</li>
                   <li>• Use inline mode for contextual feature teasers</li>
                   <li>• Provide clear value propositions in overlay content</li>
-                  <li>• Persist dismissals with PaywallBanner storage keys to respect user intent</li>
+                  <li>
+                    • Persist dismissals with PaywallBanner storage keys to
+                    respect user intent
+                  </li>
                   <li>• Surface UsageProgress before users hit their limits</li>
                   <li>• Handle async errors gracefully</li>
                   <li>• Test with keyboard navigation and screen readers</li>
@@ -1729,7 +1986,9 @@ export function UsageOverview() {
                 <h3 className="font-semibold mb-2">❌ Don&apos;t</h3>
                 <ul className="space-y-1 text-sm text-red-900">
                   <li>• Lock too many features at once</li>
-                  <li>• Use aggressive blur that makes content unrecognizable</li>
+                  <li>
+                    • Use aggressive blur that makes content unrecognizable
+                  </li>
                   <li>• Forget to handle loading and error states</li>
                   <li>• Disable pointer events if user needs to scroll</li>
                   <li>• Mix dialog and inline modes inconsistently</li>
@@ -1744,14 +2003,17 @@ export function UsageOverview() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Troubleshooting
               </h2>
-              <p className="text-muted-foreground">Common issues and solutions</p>
+              <p className="text-muted-foreground">
+                Common issues and solutions
+              </p>
             </div>
 
             <div className="space-y-4">
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">Import errors</h3>
                 <p className="text-sm text-muted-foreground mb-2">
-                  If you see &ldquo;Cannot find module&rdquo; errors, verify your tsconfig.json has correct path aliases:
+                  If you see &ldquo;Cannot find module&rdquo; errors, verify
+                  your tsconfig.json has correct path aliases:
                 </p>
                 <CodeBlock
                   index={12}
@@ -1769,7 +2031,8 @@ export function UsageOverview() {
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">Blur not visible</h3>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Ensure your content has a non-transparent background. The blur effect works by filtering the content:
+                  Ensure your content has a non-transparent background. The blur
+                  effect works by filtering the content:
                 </p>
                 <CodeBlock
                   index={13}
@@ -1785,16 +2048,18 @@ export function UsageOverview() {
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">Overlay not showing</h3>
                 <p className="text-sm text-muted-foreground">
-                  By default, the overlay shows automatically when isBlurred is true. If it&apos;s not appearing, check
-                  that showOverlayOnBlur is not set to false.
+                  By default, the overlay shows automatically when isBlurred is
+                  true. If it&apos;s not appearing, check that showOverlayOnBlur
+                  is not set to false.
                 </p>
               </div>
 
               <div className="border-l-4 border-primary/50 bg-muted/50 p-4 rounded-r-lg">
                 <h3 className="font-semibold mb-2">TypeScript errors</h3>
                 <p className="text-sm text-muted-foreground">
-                  Make sure you&apos;re using TypeScript 5+ and have proper type definitions installed. The component is
-                  fully typed with TypeScript.
+                  Make sure you&apos;re using TypeScript 5+ and have proper type
+                  definitions installed. The component is fully typed with
+                  TypeScript.
                 </p>
               </div>
             </div>
@@ -1844,7 +2109,7 @@ export function UsageOverview() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function PropDoc({
@@ -1853,17 +2118,20 @@ function PropDoc({
   defaultValue,
   description,
 }: {
-  name: string
-  type: string
-  defaultValue?: string
-  description: string
+  name: string;
+  type: string;
+  defaultValue?: string;
+  description: string;
 }) {
   return (
     <div className="pb-4 border-b border-primary/10 last:border-0">
       <div className="flex items-start justify-between gap-4 mb-2">
         <div className="font-mono text-sm font-semibold">{name}</div>
         {defaultValue && (
-          <Badge variant="secondary" className="text-xs">
+          <Badge
+            variant="secondary"
+            className="text-xs"
+          >
             {defaultValue}
           </Badge>
         )}
@@ -1871,5 +2139,5 @@ function PropDoc({
       <div className="font-mono text-xs text-primary mb-2">{type}</div>
       <div className="text-sm text-muted-foreground">{description}</div>
     </div>
-  )
+  );
 }
