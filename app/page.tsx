@@ -15,10 +15,12 @@ import { Input } from "@/components/ui/input"
 import { AlertCircle, Loader2, Lock, ArrowRight, Sparkles, BookOpen, BarChart3, Crown, Gauge } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FeatureTooltip } from "@/components/featureTooltip/feature-tooltip"
+import { UpgradeModal } from "@/components/upgradeModal/upgrade-modal"
 
 export default function Page() {
   const router = useRouter()
   const [bannerOpen, setBannerOpen] = React.useState(true)
+  const [upgradeModalOpen, setUpgradeModalOpen] = React.useState(false)
   const [analyticsBlurred, setAnalyticsBlurred] = React.useState(true)
   const [billingBlurred, setBillingBlurred] = React.useState(true)
   const [reportsBlurred, setReportsBlurred] = React.useState(true)
@@ -107,6 +109,77 @@ export default function Page() {
     },
   ] as const
 
+  const upgradePlans = [
+    {
+      id: "growth",
+      name: "Growth",
+      description: "Unlock team-wide automation, analytics, and quota extensions.",
+      price: "$79",
+      period: "month",
+      highlight: "Everything in Starter, plus",
+      features: [
+        "Unlimited dashboards",
+        "Team benchmarks & leaderboards",
+        { label: "Priority support", footnote: "Responses within 1 business day" },
+      ],
+      ctaLabel: "Upgrade to Growth",
+      ctaPendingLabel: "Launching checkout...",
+      onSelect: async () => {
+        track("home_upgrade_modal_plan_checkout_started", { planId: "growth" })
+        await fakeUpgradeSometimes()
+        track("home_upgrade_modal_plan_checkout_completed", { planId: "growth" })
+      },
+      onSelectError: (error) => {
+        track("home_upgrade_modal_plan_checkout_failed", {
+          planId: "growth",
+          message: error instanceof Error ? error.message : String(error),
+        })
+      },
+    },
+    {
+      id: "scale",
+      name: "Scale",
+      badge: "Most popular",
+      recommended: true,
+      description: "AI forecasts, role-based permissions, and guided onboarding.",
+      price: "$129",
+      period: "month",
+      highlight: "Built for rapidly scaling product teams",
+      features: [
+        "AI churn & expansion forecasts",
+        { label: "Advanced roles & permissions", footnote: "Segment access by workspace" },
+        "Dedicated onboarding manager",
+      ],
+      ctaLabel: "Talk to sales",
+      ctaHref: "https://feature-lock.griffen.codes/contact",
+      onSelect: async () => {
+        track("home_upgrade_modal_plan_checkout_started", { planId: "scale" })
+        await wait(900)
+        track("home_upgrade_modal_plan_checkout_completed", { planId: "scale" })
+        window.open("https://feature-lock.griffen.codes/contact", "_blank", "noopener,noreferrer")
+      },
+    },
+    {
+      id: "enterprise",
+      name: "Enterprise",
+      description: "Custom security reviews, data residency options, and success planning.",
+      price: "Custom",
+      highlight: "Tailored deployment with white-glove support",
+      features: [
+        "SOC2 reports & security reviews",
+        { label: "Customer success workshops", footnote: "Quarterly roadmap reviews" },
+        "On-prem & regional data residency",
+      ],
+      ctaLabel: "Request enterprise demo",
+      ctaPendingLabel: "Scheduling...",
+      onSelect: async () => {
+        track("home_upgrade_modal_plan_checkout_started", { planId: "enterprise" })
+        await wait(1200)
+        track("home_upgrade_modal_plan_checkout_completed", { planId: "enterprise" })
+      },
+    },
+  ] as const
+
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
       <div className="p-8 pb-20 gap-16 sm:p-20">
@@ -121,13 +194,24 @@ export default function Page() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent leading-tight">
-              BlurWrapper
+              Feature Lock
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              A flexible React component that blurs locked features and guides users to upgrade—without breaking their
-              flow.
+              A suite of upgrade-ready UI building blocks—BlurWrapper, PaywallBanner, FeatureTooltip, and UpgradeModal—to
+              convert users without disrupting their flow.
             </p>
+
+            <div className="flex flex-wrap justify-center gap-2 text-xs font-medium text-primary">
+              {["BlurWrapper", "PaywallBanner", "FeatureTooltip", "UpgradeModal"].map((label) => (
+                <span
+                  key={label}
+                  className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary"
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
 
             <div className="flex flex-wrap gap-4 justify-center items-center pt-4">
               <Link href="/docs">
@@ -156,10 +240,67 @@ export default function Page() {
           </header>
 
           <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/60 backdrop-blur-sm space-y-6">
+            <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Meet the toolkit
+              </h2>
+              <p className="text-muted-foreground">
+                Install only what you need—or compose all four components for a complete upgrade experience.
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-2xl border border-primary/15 bg-card/80 p-5 shadow-sm">
+                <h3 className="text-lg font-semibold text-foreground">BlurWrapper</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Blur locked content, run async upgrade flows, and keep focus management accessible.
+                </p>
+                <Link href="/docs#blurwrapper">
+                  <Button variant="ghost" className="mt-4 px-0 text-primary hover:text-primary/80" onClick={() => track("home_summary_blurwrapper_docs_clicked")}>
+                    View docs
+                  </Button>
+                </Link>
+              </div>
+              <div className="rounded-2xl border border-primary/15 bg-card/80 p-5 shadow-sm">
+                <h3 className="text-lg font-semibold text-foreground">PaywallBanner</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Announce launches or quota alerts with dismissible messaging that respects user intent.
+                </p>
+                <Link href="/docs#paywall-banner">
+                  <Button variant="ghost" className="mt-4 px-0 text-primary hover:text-primary/80" onClick={() => track("home_summary_paywall_docs_clicked")}>
+                    View docs
+                  </Button>
+                </Link>
+              </div>
+              <div className="rounded-2xl border border-primary/15 bg-card/80 p-5 shadow-sm">
+                <h3 className="text-lg font-semibold text-foreground">FeatureTooltip</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Offer subtle inline upsells for disabled actions, icons, or tables with async CTA support.
+                </p>
+                <Link href="/docs#feature-tooltip">
+                  <Button variant="ghost" className="mt-4 px-0 text-primary hover:text-primary/80" onClick={() => track("home_summary_tooltip_docs_clicked")}>
+                    View docs
+                  </Button>
+                </Link>
+              </div>
+              <div className="rounded-2xl border border-primary/15 bg-card/80 p-5 shadow-sm">
+                <h3 className="text-lg font-semibold text-foreground">UpgradeModal</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Compare plans in-place with responsive cards, async buttons, and enterprise contact paths.
+                </p>
+                <Link href="/docs#upgrade-modal">
+                  <Button variant="ghost" className="mt-4 px-0 text-primary hover:text-primary/80" onClick={() => track("home_summary_modal_docs_clicked")}>
+                    View docs
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/60 backdrop-blur-sm space-y-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
-                  Announce features without hard paywalls
+                  PaywallBanner · Announce features without hard paywalls
                 </h2>
                 <p className="text-muted-foreground">
                   PaywallBanner helps you highlight launches and upgrades while letting users dismiss messaging when
@@ -205,12 +346,12 @@ export default function Page() {
             </PaywallBanner>
           </section>
 
-          {/* Interactive Demo Controls */}
+          {/* BlurWrapper Demo */}
           <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
-                  Interactive Demo
+                  BlurWrapper · Interactive demo
                 </h2>
                 <p className="text-muted-foreground">
                   Toggle sections to see blur effects, dialogs, and inline overlays in action
@@ -230,12 +371,12 @@ export default function Page() {
             </div>
           </section>
 
-          {/* Micro Upsells */}
+          {/* FeatureTooltip */}
           <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm space-y-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
-                  Inline nudges that respect context
+                  FeatureTooltip · Inline nudges
                 </h2>
                 <p className="text-muted-foreground">
                   FeatureTooltip keeps upgrade messaging lightweight for buttons, table cells, and icons.
@@ -290,6 +431,54 @@ export default function Page() {
                 )
               })}
             </div>
+          </section>
+
+          {/* Upgrade Modal */}
+          <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                  Compare plans without leaving the page
+                </h2>
+                <p className="text-muted-foreground">
+                  UpgradeModal packs a full pricing comparison into a single, focused dialog.
+                </p>
+              </div>
+              <Link href="/docs#upgrade-modal">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="self-start md:self-auto"
+                  onClick={() => track("home_upgrade_modal_docs_clicked")}
+                >
+                  View docs
+                </Button>
+              </Link>
+            </div>
+
+            <UpgradeModal
+              trigger={
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
+                  onClick={() => {
+                    track("home_upgrade_modal_trigger_clicked")
+                  }}
+                >
+                  View plans
+                </Button>
+              }
+              open={upgradeModalOpen}
+              onOpenChange={(next) => {
+                setUpgradeModalOpen(next)
+                track(next ? "home_upgrade_modal_opened" : "home_upgrade_modal_closed")
+              }}
+              subtitle="Scale your monetization strategy"
+              finePrint="Prices shown in USD. Cancel anytime during the billing cycle."
+              supportEmail="sales@feature-lock.dev"
+              onPlanSelected={(planId) => track("home_upgrade_modal_plan_selected", { planId })}
+              plans={upgradePlans}
+            />
           </section>
 
           {/* Demo Cards */}
@@ -487,32 +676,31 @@ export default function Page() {
           {/* Features */}
           <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-6">
-              Why BlurWrapper?
+              Why Feature Lock?
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                 <h3 className="font-semibold mb-2">🎯 Context-aware upsells</h3>
                 <p className="text-muted-foreground text-sm">
-                  Show upgrade prompts exactly where users need premium features—not in a separate pricing page.
+                  Use the right pattern for every upsell—from blurred content and inline tooltips to banners and modals.
                 </p>
               </div>
               <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                 <h3 className="font-semibold mb-2">♿ Accessible by default</h3>
                 <p className="text-muted-foreground text-sm">
-                  Focus blocking, screen reader announcements, and keyboard shortcuts built-in.
+                  Radix primitives, focus management, and ARIA helpers keep each component inclusive out of the box.
                 </p>
               </div>
               <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                 <h3 className="font-semibold mb-2">⚡ Async-ready</h3>
                 <p className="text-muted-foreground text-sm">
-                  Handle upgrade flows with React 19&rsquo;s useTransition—pending states, error handling, focus
-                  management.
+                  Built-in loading, error recovery, and analytics hooks make it easy to wire real billing flows.
                 </p>
               </div>
               <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                 <h3 className="font-semibold mb-2">🎨 Flexible styling</h3>
                 <p className="text-muted-foreground text-sm">
-                  Dialog or inline overlays, custom render props, and full control over positioning.
+                  Tailwind-friendly APIs, render props, and composable primitives adapt to any product surface.
                 </p>
               </div>
             </div>

@@ -132,7 +132,8 @@ export default function DocsPage() {
                 Documentation
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Complete guide to installing BlurWrapper, PaywallBanner, and FeatureTooltip in your Next.js project
+                Complete guide to installing BlurWrapper, PaywallBanner, FeatureTooltip, and UpgradeModal in your Next.js
+                project
               </p>
             </div>
 
@@ -175,10 +176,11 @@ export default function DocsPage() {
                 className="w-full"
                 onValueChange={(value) => track("docs_install_tab_changed", { component: value })}
               >
-                <TabsList className="grid w-full grid-cols-3 max-w-2xl">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 max-w-3xl">
                   <TabsTrigger value="blur-wrapper">BlurWrapper</TabsTrigger>
                   <TabsTrigger value="paywall-banner">PaywallBanner</TabsTrigger>
                   <TabsTrigger value="feature-tooltip">FeatureTooltip</TabsTrigger>
+                  <TabsTrigger value="upgrade-modal">UpgradeModal</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="blur-wrapper" className="space-y-4 pt-4">
@@ -234,7 +236,192 @@ export default function DocsPage() {
                     </ul>
                   </div>
                 </TabsContent>
+
+                <TabsContent value="upgrade-modal" className="space-y-4 pt-4">
+                  <p className="text-muted-foreground">
+                    Present a full plan comparison experience with UpgradeModal:
+                  </p>
+                  <InstallCommand
+                    command="npx shadcn@latest add https://feature-lock.griffen.codes/r/upgrade-modal"
+                    index={14}
+                  />
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• UpgradeModal component at @/components/upgradeModal/upgrade-modal</li>
+                      <li>• Reuses existing shadcn/ui dialog + button primitives</li>
+                      <li>• lucide-react icons for plan highlights & pending states</li>
+                    </ul>
+                  </div>
+                </TabsContent>
               </Tabs>
+            </div>
+          </section>
+
+          {/* UpgradeModal API */}
+          <section className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                UpgradeModal API
+              </h2>
+              <p className="text-muted-foreground">Prop reference for the standalone upgrade dialog experience</p>
+            </div>
+
+            <div className="space-y-8">
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Core Props</h3>
+                <div className="space-y-4">
+                  <PropDoc name="plans" type="UpgradePlan[]" description="Plan definitions rendered inside the modal" />
+                  <PropDoc
+                    name="trigger"
+                    type="React.ReactNode"
+                    description="Optional trigger rendered as a dialog trigger via asChild"
+                  />
+                  <PropDoc
+                    name="open"
+                    type="boolean"
+                    description="Controlled open state; pair with onOpenChange for external toggles"
+                  />
+                  <PropDoc
+                    name="defaultOpen"
+                    type="boolean"
+                    description="Initial open state when the modal manages its own visibility"
+                  />
+                  <PropDoc
+                    name="onOpenChange"
+                    type="(open: boolean) => void"
+                    description="Fired whenever the dialog open state changes"
+                  />
+                  <PropDoc
+                    name="onClose"
+                    type="() => void"
+                    description="Invoked after the modal closes (user action or programmatic)"
+                  />
+                  <PropDoc
+                    name="onPlanSelected"
+                    type="(planId: string) => void"
+                    description="Receive the plan id after a CTA resolves successfully"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Content & Styling</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="title"
+                    type="string"
+                    defaultValue='"Unlock more with Feature Lock"'
+                    description="Modal heading shown at the top of the dialog"
+                  />
+                  <PropDoc name="subtitle" type="string" description="Optional subheading styled in the primary color" />
+                  <PropDoc
+                    name="description"
+                    type="string"
+                    description="Supporting paragraph that explains the upgrade value"
+                  />
+                  <PropDoc
+                    name="badge"
+                    type="string | null"
+                    defaultValue='"Upgrade"'
+                    description="Small badge rendered above the title; set to null to hide"
+                  />
+                  <PropDoc
+                    name="highlightLabel"
+                    type="string"
+                    defaultValue='"Everything in Free, plus"'
+                    description="Label displayed before each plan's feature list"
+                  />
+                  <PropDoc
+                    name="finePrint"
+                    type="string"
+                    description="Fine print text displayed underneath the plan grid"
+                  />
+                  <PropDoc
+                    name="supportEmail"
+                    type="string"
+                    description="Adds a support callout with a clickable mailto link"
+                  />
+                  <PropDoc
+                    name="supportLabel"
+                    type="string"
+                    defaultValue='"Need help? Reach out:"'
+                    description="Label shown before the support email link"
+                  />
+                  <PropDoc
+                    name="footer"
+                    type="React.ReactNode"
+                    description="Custom footer content (secondary actions, guarantees, etc.)"
+                  />
+                  <PropDoc
+                    name="className"
+                    type="string"
+                    description="Extra classes applied to the dialog content wrapper"
+                  />
+                  <PropDoc
+                    name="contentClassName"
+                    type="string"
+                    description="Extra classes for the inner content layout"
+                  />
+                  <PropDoc
+                    name="planCardClassName"
+                    type="string"
+                    description="Extra classes appended to every plan card"
+                  />
+                  <PropDoc
+                    name="showCloseButton"
+                    type="boolean"
+                    defaultValue="true"
+                    description="Toggle the default top-right close button"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Behavior</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="autoCloseOnSelect"
+                    type="boolean"
+                    defaultValue="true"
+                    description="Automatically closes the modal when a plan CTA succeeds"
+                  />
+                  <PropDoc
+                    name="resetErrorsOnOpen"
+                    type="boolean"
+                    defaultValue="true"
+                    description="Clears pending/error state whenever the modal reopens"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50 space-y-3">
+                <h3 className="text-xl font-semibold">UpgradePlan fields</h3>
+                <p className="text-sm text-muted-foreground">
+                  Each entry in <code>plans</code> accepts the following properties:
+                </p>
+                <ul className="list-disc pl-6 space-y-1 text-sm text-muted-foreground">
+                  <li>
+                    <code>id</code>: unique identifier used for analytics callbacks and pending/error state tracking.
+                  </li>
+                  <li>
+                    <code>name</code>, <code>description</code>, <code>price</code>, <code>period</code>, <code>badge</code>,
+                    <code>highlight</code>, <code>footnote</code>: text content for the plan card.
+                  </li>
+                  <li>
+                    <code>features</code>: array of strings or <code>{`{ label, included?, footnote? }`}</code> objects to
+                    render capability lists.
+                  </li>
+                  <li>
+                    <code>ctaLabel</code>, <code>ctaHref</code>, <code>ctaPendingLabel</code>: customize primary CTA text
+                    and link behavior.
+                  </li>
+                  <li>
+                    <code>onSelect</code>, <code>onSelectSuccess</code>, <code>onSelectError</code>: async handler and hooks
+                    for custom upgrade flows.
+                  </li>
+                </ul>
+              </div>
             </div>
           </section>
 
@@ -245,13 +432,13 @@ export default function DocsPage() {
                 Quick Start
               </h2>
               <p className="text-muted-foreground">
-                Get up and running in minutes with BlurWrapper, PaywallBanner, and FeatureTooltip
+                Get up and running in minutes with BlurWrapper, PaywallBanner, FeatureTooltip, and UpgradeModal
               </p>
             </div>
 
             <div className="space-y-12">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold">BlurWrapper</h3>
+                <h3 id="blurwrapper" className="text-xl font-semibold">BlurWrapper</h3>
                 <Tabs
                   defaultValue="dialog"
                   className="w-full"
@@ -450,6 +637,81 @@ export function InlineUpsell() {
                     <li>Disabled buttons that require higher plans</li>
                     <li>Inline icons in tables or charts</li>
                     <li>Feature flags where you still want to tease capabilities</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 id="upgrade-modal" className="text-xl font-semibold">UpgradeModal</h3>
+                <p className="text-muted-foreground">
+                  Give users a full plan comparison without leaving the current surface:
+                </p>
+                <CodeBlock
+                  index={15}
+                  type="quickstart_upgrade_modal"
+                  code={`"use client"
+
+import { Button } from "@/components/ui/button"
+import { UpgradeModal } from "@/components/upgradeModal/upgrade-modal"
+
+export function PlanComparison() {
+  async function startGrowthCheckout() {
+    const response = await fetch("/api/checkout/growth", { method: "POST" })
+    if (!response.ok) throw new Error("Unable to start checkout")
+  }
+
+  return (
+    <UpgradeModal
+      trigger={
+        <Button variant="outline">
+          Compare plans
+        </Button>
+      }
+      subtitle="Scale with confidence"
+      finePrint="Prices listed in USD. Cancel anytime."
+      supportEmail="sales@feature-lock.dev"
+      onPlanSelected={(planId) => console.log("Selected plan:", planId)}
+      plans={[
+        {
+          id: "growth",
+          name: "Growth",
+          price: "$79",
+          period: "month",
+          highlight: "Everything in Free, plus",
+          features: [
+            "Unlimited dashboards",
+            "Team benchmarks",
+            { label: "Priority support", footnote: "1 business-day response time" },
+          ],
+          ctaLabel: "Upgrade to Growth",
+          onSelect: startGrowthCheckout,
+        },
+        {
+          id: "scale",
+          name: "Scale",
+          recommended: true,
+          badge: "Most popular",
+          price: "$129",
+          period: "month",
+          features: [
+            "AI churn forecasts",
+            "Custom roles & permissions",
+            "Dedicated onboarding manager",
+          ],
+          ctaLabel: "Talk to sales",
+          ctaHref: "/contact",
+        },
+      ]}
+    />
+  )
+}`}
+                />
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-1 text-sm text-muted-foreground">
+                  <p>Best practices:</p>
+                  <ul className="space-y-1 pl-4 list-disc">
+                    <li>Use <code>onPlanSelected</code> to instrument analytics funnels.</li>
+                    <li>Set <code>autoCloseOnSelect</code> to <code>false</code> if you keep workflows inline.</li>
+                    <li>Pair with support email or footer CTA for enterprise outreach.</li>
                   </ul>
                 </div>
               </div>
