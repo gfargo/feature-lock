@@ -85,9 +85,23 @@ export function LockedFeature() {
 
 [**View Full BlurWrapper Documentation →**](#blurwrapper-documentation)
 
+### PaywallBanner
+
+Dismissible announcement banner that spotlights new or locked functionality, provides upgrade CTAs, and respects user
+choice with optional local persistence.
+
+- Async primary & secondary actions with loading/error states
+- Variants for upgrade, info, success, and warning messages
+- Optional `storageKey` to remember dismissals across visits
+
+Install directly into your project:
+
+```bash
+npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner
+```
+
 ### Coming Soon
 
-- **PaywallBanner** - Dismissible banner for feature announcements
 - **UpgradeModal** - Standalone upgrade dialog with plan comparison
 - **FeatureTooltip** - Inline tooltips for locked features
 - **UsageProgress** - Visual quota indicators with upgrade CTAs
@@ -218,7 +232,7 @@ Feature Lock components are distributed via a ShadcnUI-compatible registry. This
 | Component | Status | Command |
 |-----------|--------|---------|
 | BlurWrapper | ✅ Stable | `npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper` |
-| PaywallBanner | 🚧 Coming Soon | - |
+| PaywallBanner | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner` |
 | UpgradeModal | 🚧 Coming Soon | - |
 | FeatureTooltip | 🚧 Coming Soon | - |
 | UsageProgress | 🚧 Coming Soon | - |
@@ -348,6 +362,7 @@ See [LICENSE](./LICENSE) for details.
 
 ### Current (v1.0)
 - ✅ BlurWrapper component
+- ✅ PaywallBanner component
 - ✅ Dialog and inline modes
 - ✅ Async handling with useTransition
 - ✅ Full accessibility support
@@ -356,7 +371,6 @@ See [LICENSE](./LICENSE) for details.
 - ✅ Analytics integration
 
 ### Coming Soon (v1.1)
-- 🚧 PaywallBanner component
 - 🚧 UpgradeModal component
 - 🚧 Additional positioning options
 - 🚧 Animation customization
