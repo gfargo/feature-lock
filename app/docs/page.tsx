@@ -603,7 +603,7 @@ export default function DocsPage() {
                 Quick Start
               </h2>
               <p className="text-muted-foreground">
-                Get up and running in minutes with BlurWrapper, PaywallBanner, FeatureTooltip, and UpgradeModal
+                Get up and running in minutes with BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress
               </p>
             </div>
 
