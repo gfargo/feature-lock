@@ -438,7 +438,7 @@ export default function DocsPage() {
 
             <div className="space-y-12">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold">BlurWrapper</h3>
+                <h3 id="blurwrapper" className="text-xl font-semibold">BlurWrapper</h3>
                 <Tabs
                   defaultValue="dialog"
                   className="w-full"
