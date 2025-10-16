@@ -81,5 +81,32 @@ export default {
       exclude: [],
       registryDependencies: ["button", "badge"],
     },
+    {
+      name: "feature-tooltip",
+      fileName: "feature-tooltip.json",
+      type: "registry:ui",
+      dependencies: {},
+      include: [
+        /^components\/featureTooltip\/feature-tooltip\.tsx$/,
+        /^components\/ui\/tooltip\.tsx$/,
+      ],
+      exclude: [
+        /^components\/featureTooltip\/README\.md$/,
+      ],
+      registryDependencies: ["button", "badge"],
+    },
+    {
+      name: "feature-tooltip-full",
+      fileName: "feature-tooltip-full.json",
+      type: "registry:ui",
+      dependencies: {},
+      include: [
+        /^components\/featureTooltip\/feature-tooltip\.tsx$/,
+        /^components\/featureTooltip\/README\.md$/,
+        /^components\/ui\/tooltip\.tsx$/,
+      ],
+      exclude: [],
+      registryDependencies: ["button", "badge"],
+    },
   ],
 };

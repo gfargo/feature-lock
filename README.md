@@ -100,10 +100,23 @@ Install directly into your project:
 npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner
 ```
 
+### FeatureTooltip
+
+Inline tooltip for gently nudging upgrades without interrupting users. Ideal for inline icons, disabled buttons, or table cells.
+
+- Accessible Radix tooltip trigger on hover/focus
+- Optional CTA (link or async action) with pending/error states
+- Highlight list for feature value props
+
+Install it with one command:
+
+```bash
+npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip
+```
+
 ### Coming Soon
 
 - **UpgradeModal** - Standalone upgrade dialog with plan comparison
-- **FeatureTooltip** - Inline tooltips for locked features
 - **UsageProgress** - Visual quota indicators with upgrade CTAs
 
 ---
@@ -233,8 +246,8 @@ Feature Lock components are distributed via a ShadcnUI-compatible registry. This
 |-----------|--------|---------|
 | BlurWrapper | ✅ Stable | `npx shadcn@latest add https://feature-lock.griffen.codes/r/blur-wrapper` |
 | PaywallBanner | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/paywall-banner` |
+| FeatureTooltip | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip` |
 | UpgradeModal | 🚧 Coming Soon | - |
-| FeatureTooltip | 🚧 Coming Soon | - |
 | UsageProgress | 🚧 Coming Soon | - |
 
 ### Registry API
@@ -363,6 +376,7 @@ See [LICENSE](./LICENSE) for details.
 ### Current (v1.0)
 - ✅ BlurWrapper component
 - ✅ PaywallBanner component
+- ✅ FeatureTooltip component
 - ✅ Dialog and inline modes
 - ✅ Async handling with useTransition
 - ✅ Full accessibility support
@@ -376,7 +390,6 @@ See [LICENSE](./LICENSE) for details.
 - 🚧 Animation customization
 
 ### Future (v2.0)
-- 🔮 FeatureTooltip component
 - 🔮 UsageProgress component
 - 🔮 Internationalization (i18n)
 - 🔮 Vue and Svelte versions
