@@ -132,8 +132,8 @@ export default function DocsPage() {
                 Documentation
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Complete guide to installing BlurWrapper, PaywallBanner, FeatureTooltip, and UpgradeModal in your Next.js
-                project
+                Complete guide to installing BlurWrapper, PaywallBanner, FeatureTooltip, UpgradeModal, and UsageProgress
+                in your Next.js project
               </p>
             </div>
 
@@ -176,11 +176,12 @@ export default function DocsPage() {
                 className="w-full"
                 onValueChange={(value) => track("docs_install_tab_changed", { component: value })}
               >
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 max-w-3xl">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 max-w-4xl">
                   <TabsTrigger value="blur-wrapper">BlurWrapper</TabsTrigger>
                   <TabsTrigger value="paywall-banner">PaywallBanner</TabsTrigger>
                   <TabsTrigger value="feature-tooltip">FeatureTooltip</TabsTrigger>
                   <TabsTrigger value="upgrade-modal">UpgradeModal</TabsTrigger>
+                  <TabsTrigger value="usage-progress">UsageProgress</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="blur-wrapper" className="space-y-4 pt-4">
@@ -251,6 +252,24 @@ export default function DocsPage() {
                       <li>• UpgradeModal component at @/components/upgradeModal/upgrade-modal</li>
                       <li>• Reuses existing shadcn/ui dialog + button primitives</li>
                       <li>• lucide-react icons for plan highlights & pending states</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="usage-progress" className="space-y-4 pt-4">
+                  <p className="text-muted-foreground">
+                    Visualize quotas and drive upgrades with UsageProgress:
+                  </p>
+                  <InstallCommand
+                    command="npx shadcn@latest add https://feature-lock.griffen.codes/r/usage-progress"
+                    index={16}
+                  />
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• UsageProgress component at @/components/usageProgress/usage-progress</li>
+                      <li>• Shared progress bar helper at @/components/usageProgress/usage-progress-bar</li>
+                      <li>• No extra primitives needed—works with existing shadcn/ui buttons & badges</li>
                     </ul>
                   </div>
                 </TabsContent>
@@ -419,6 +438,138 @@ export default function DocsPage() {
                   <li>
                     <code>onSelect</code>, <code>onSelectSuccess</code>, <code>onSelectError</code>: async handler and hooks
                     for custom upgrade flows.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* UsageProgress API */}
+          <section className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                UsageProgress API
+              </h2>
+              <p className="text-muted-foreground">Props for the quota tracking component</p>
+            </div>
+
+            <div className="space-y-8">
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Core Props</h3>
+                <div className="space-y-4">
+                  <PropDoc name="tracks" type="UsageTrack[]" description="Usage rows displayed with progress bars" />
+                  <PropDoc
+                    name="variant"
+                    type='"card" | "inline"'
+                    defaultValue='"card"'
+                    description="Switch between card layout and inline section"
+                  />
+                  <PropDoc
+                    name="title"
+                    type="string"
+                    defaultValue='"Usage overview"'
+                    description="Heading shown above the usage metrics"
+                  />
+                  <PropDoc
+                    name="subtitle"
+                    type="string"
+                    defaultValue='"Stay on top of quota limits and see when to upgrade."'
+                    description="Supporting text displayed under the heading"
+                  />
+                  <PropDoc
+                    name="showSummary"
+                    type="boolean"
+                    defaultValue="true"
+                    description="Toggle visibility of the summary/info banner"
+                  />
+                  <PropDoc
+                    name="summaryLabel"
+                    type="string"
+                    defaultValue='"Upgrade unlocks"'
+                    description="Label displayed in the summary banner"
+                  />
+                  <PropDoc
+                    name="summaryValue"
+                    type="string"
+                    description="Highlighted value shown on the right side of the summary banner"
+                  />
+                  <PropDoc
+                    name="summaryMessage"
+                    type="string"
+                    description="Additional text under the summary label"
+                  />
+                  <PropDoc name="note" type="string" description="Small note displayed alongside CTAs" />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Actions</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="ctaLabel"
+                    type="string"
+                    defaultValue='"Upgrade plan"'
+                    description="Primary CTA button label"
+                  />
+                  <PropDoc
+                    name="ctaHref"
+                    type="string"
+                    description="Link target if no async handler is provided"
+                  />
+                  <PropDoc
+                    name="ctaPendingLabel"
+                    type="string"
+                    defaultValue='"Working..."'
+                    description="Text shown while the CTA handler resolves"
+                  />
+                  <PropDoc
+                    name="onCtaClick"
+                    type="() => Promise<void> | void"
+                    description="Async handler for the primary CTA"
+                  />
+                  <PropDoc
+                    name="onCtaSuccess"
+                    type="() => void"
+                    description="Callback fired after a successful CTA"
+                  />
+                  <PropDoc
+                    name="onCtaError"
+                    type="(error: unknown) => void"
+                    description="Callback fired when the CTA handler throws"
+                  />
+                  <PropDoc
+                    name="secondaryLabel"
+                    type="string"
+                    description="Label for the optional secondary button"
+                  />
+                  <PropDoc
+                    name="onSecondaryClick"
+                    type="() => void"
+                    description="Handler for the secondary action"
+                  />
+                  <PropDoc
+                    name="pending"
+                    type="boolean"
+                    defaultValue="false"
+                    description="Force the CTA into a loading state externally"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50 space-y-3">
+                <h3 className="text-xl font-semibold">UsageTrack fields</h3>
+                <ul className="list-disc pl-6 space-y-1 text-sm text-muted-foreground">
+                  <li>
+                    <code>label</code> (string): Display name for the quota. <code>value</code> (number) and
+                    <code>limit</code> (number) calculate percentages automatically.
+                  </li>
+                  <li>
+                    <code>percentage</code> (number): Override percentage when no limit applies.
+                    <code>status</code> controls styling (<code>"ok"</code>, <code>"warning"</code>, <code>"critical"</code>).
+                  </li>
+                  <li>
+                    Optional fields: <code>badge</code>, <code>trend</code> (<code>"up"</code>, <code>"down"</code>,
+                    <code>"steady"</code>), <code>description</code>. They reinforce messaging without clutter.
                   </li>
                 </ul>
               </div>
@@ -712,6 +863,66 @@ export function PlanComparison() {
                     <li>Use <code>onPlanSelected</code> to instrument analytics funnels.</li>
                     <li>Set <code>autoCloseOnSelect</code> to <code>false</code> if you keep workflows inline.</li>
                     <li>Pair with support email or footer CTA for enterprise outreach.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 id="usage-progress" className="text-xl font-semibold">UsageProgress</h3>
+                <p className="text-muted-foreground">
+                  Track quota consumption, warn before limits, and embed upgrade CTAs directly in your dashboards:
+                </p>
+                <CodeBlock
+                  index={17}
+                  type="quickstart_usage_progress"
+                  code={`"use client"
+
+import { UsageProgress } from "@/components/usageProgress/usage-progress"
+
+export function UsageOverview() {
+  return (
+    <UsageProgress
+      title="Your workspace usage"
+      subtitle="Quotas reset on the 1st of each month."
+      tracks={[
+        {
+          label: "API requests",
+          value: 92_300,
+          limit: 100_000,
+          status: "warning",
+          badge: "92% used",
+          trend: "up",
+          description: "Scale plan adds 500k requests / month",
+        },
+        {
+          label: "Seats",
+          value: 28,
+          limit: 30,
+          status: "critical",
+          badge: "2 remaining",
+        },
+      ]}
+      summaryValue="Scale plan unlocks 500k requests & 100 seats"
+      summaryMessage="Upgrade before May 1 to avoid throttling."
+      ctaLabel="Upgrade usage"
+      ctaPendingLabel="Launching checkout..."
+      onCtaClick={async () => {
+        const response = await fetch("/api/checkout/scale", { method: "POST" })
+        if (!response.ok) throw new Error("Unable to start checkout")
+      }}
+      secondaryLabel="Contact sales"
+      onSecondaryClick={() => window.open("mailto:sales@feature-lock.dev")}
+      note="Need custom limits? Book a call with sales."
+    />
+  )
+}`}
+                />
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-1 text-sm text-muted-foreground">
+                  <p>Use it for:</p>
+                  <ul className="space-y-1 pl-4 list-disc">
+                    <li>Usage dashboards & billing pages</li>
+                    <li>Account alerts near quota limits</li>
+                    <li>Contextual upgrade prompts after heavy usage</li>
                   </ul>
                 </div>
               </div>
