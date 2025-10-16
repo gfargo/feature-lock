@@ -12,8 +12,9 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { AlertCircle, Loader2, Lock, ArrowRight, Sparkles, BookOpen } from "lucide-react"
+import { AlertCircle, Loader2, Lock, ArrowRight, Sparkles, BookOpen, BarChart3, Crown, Gauge } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { FeatureTooltip } from "@/components/featureTooltip/feature-tooltip"
 
 export default function Page() {
   const router = useRouter()
@@ -53,11 +54,58 @@ export default function Page() {
     setBannerOpen(true)
     track("home_banner_reset")
   }
+  const handleTooltipUpgrade = async (feature: string) => {
+    track("home_tooltip_upgrade_clicked", { feature })
+    await wait(1000)
+    track("home_tooltip_upgrade_completed", { feature })
+  }
 
   // Track page view
   React.useEffect(() => {
     track("home_viewed")
   }, [])
+
+  const tooltipItems = [
+    {
+      id: "ai-forecasts",
+      title: "AI Forecasts",
+      description: "Predict churn before it happens with daily health scoring.",
+      badge: "Pro",
+      highlights: ["Daily signal refresh", "Scenario planning", "CSV exports"],
+      icon: Sparkles,
+      ctaLabel: "Start trial",
+      onCtaClick: () => handleTooltipUpgrade("ai-forecasts"),
+      triggerLabel: "AI forecasts (Pro)",
+      TriggerIcon: Sparkles,
+    },
+    {
+      id: "team-benchmarks",
+      title: "Team Benchmarks",
+      description: "Compare squads and identify top performers instantly.",
+      badge: "Growth",
+      highlights: ["Weekly goal tracking", "Drill-down by role"],
+      icon: BarChart3,
+      ctaLabel: "Upgrade team",
+      onCtaClick: () => handleTooltipUpgrade("team-benchmarks"),
+      triggerLabel: "Team benchmarks",
+      TriggerIcon: BarChart3,
+    },
+    {
+      id: "executive-dash",
+      title: "Executive dashboard",
+      description: "Aggregate KPIs, alerts, and runway forecasting in one view.",
+      badge: "Enterprise",
+      highlights: ["Unlimited dashboards", "Scheduled email digests"],
+      icon: Crown,
+      ctaLabel: "Talk to sales",
+      ctaHref: "https://feature-lock.griffen.codes/contact",
+      onOpenChange: (open: boolean) => {
+        if (open) track("home_tooltip_opened", { feature: "executive-dash" })
+      },
+      triggerLabel: "Executive dashboard",
+      TriggerIcon: Gauge,
+    },
+  ] as const
 
   return (
     <div className="font-sans min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
@@ -179,6 +227,68 @@ export default function Page() {
                   Blur all sections
                 </Label>
               </div>
+            </div>
+          </section>
+
+          {/* Micro Upsells */}
+          <section className="border-2 border-primary/10 rounded-2xl p-8 bg-card/50 backdrop-blur-sm space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                  Inline nudges that respect context
+                </h2>
+                <p className="text-muted-foreground">
+                  FeatureTooltip keeps upgrade messaging lightweight for buttons, table cells, and icons.
+                </p>
+              </div>
+              <Link href="/docs#feature-tooltip">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="self-start md:self-auto"
+                  onClick={() => track("home_feature_tooltip_docs_clicked")}
+                >
+                  View docs
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              {tooltipItems.map((item) => {
+                const TriggerIcon = item.TriggerIcon
+                return (
+                  <FeatureTooltip
+                    key={item.id}
+                    title={item.title}
+                    description={item.description}
+                    badge={item.badge}
+                    icon={item.icon}
+                    highlights={item.highlights}
+                    ctaLabel={item.ctaLabel}
+                    ctaHref={item.ctaHref}
+                    onCtaClick={item.onCtaClick}
+                    onOpenChange={(open) => {
+                      if (open) {
+                        track("home_tooltip_opened", { feature: item.id })
+                      }
+                      item.onOpenChange?.(open)
+                    }}
+                    className="w-full"
+                    contentClassName="bg-background/98"
+                  >
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between rounded-xl border border-primary/20 bg-background/40 px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-background/80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    >
+                      <span className="flex items-center gap-2">
+                        <TriggerIcon className="size-4" aria-hidden="true" />
+                        {item.triggerLabel}
+                      </span>
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </button>
+                  </FeatureTooltip>
+                )
+              })}
             </div>
           </section>
 

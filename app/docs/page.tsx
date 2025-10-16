@@ -132,7 +132,7 @@ export default function DocsPage() {
                 Documentation
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Complete guide to installing BlurWrapper and PaywallBanner in your Next.js project
+                Complete guide to installing BlurWrapper, PaywallBanner, and FeatureTooltip in your Next.js project
               </p>
             </div>
 
@@ -175,9 +175,10 @@ export default function DocsPage() {
                 className="w-full"
                 onValueChange={(value) => track("docs_install_tab_changed", { component: value })}
               >
-                <TabsList className="grid w-full grid-cols-2 max-w-md">
+                <TabsList className="grid w-full grid-cols-3 max-w-2xl">
                   <TabsTrigger value="blur-wrapper">BlurWrapper</TabsTrigger>
                   <TabsTrigger value="paywall-banner">PaywallBanner</TabsTrigger>
+                  <TabsTrigger value="feature-tooltip">FeatureTooltip</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="blur-wrapper" className="space-y-4 pt-4">
@@ -215,6 +216,24 @@ export default function DocsPage() {
                     </ul>
                   </div>
                 </TabsContent>
+
+                <TabsContent value="feature-tooltip" className="space-y-4 pt-4">
+                  <p className="text-muted-foreground">
+                    Need subtle inline upsells? FeatureTooltip installs with this command:
+                  </p>
+                  <InstallCommand
+                    command="npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip"
+                    index={7}
+                  />
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <h4 className="font-semibold mb-2">✨ What gets installed?</h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• FeatureTooltip component at @/components/featureTooltip/feature-tooltip</li>
+                      <li>• Tooltip UI primitive at @/components/ui/tooltip</li>
+                      <li>• lucide-react icons for the default lock/highlight styles</li>
+                    </ul>
+                  </div>
+                </TabsContent>
               </Tabs>
             </div>
           </section>
@@ -225,7 +244,9 @@ export default function DocsPage() {
               <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
                 Quick Start
               </h2>
-              <p className="text-muted-foreground">Get up and running in minutes with BlurWrapper and PaywallBanner</p>
+              <p className="text-muted-foreground">
+                Get up and running in minutes with BlurWrapper, PaywallBanner, and FeatureTooltip
+              </p>
             </div>
 
             <div className="space-y-12">
@@ -336,7 +357,7 @@ export function LockedFeature() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold">PaywallBanner</h3>
+                <h3 id="paywall-banner" className="text-xl font-semibold">PaywallBanner</h3>
                 <p className="text-muted-foreground">
                   Add a dismissible announcement banner that respects user intent and keeps upgrade pathways visible:
                 </p>
@@ -385,6 +406,50 @@ export function LaunchAnnouncement() {
                       Swap <code>variant</code> between <code>&quot;upgrade&quot;</code>, <code>&quot;info&quot;</code>,{" "}
                       <code>&quot;success&quot;</code>, and <code>&quot;warning&quot;</code>.
                     </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 id="feature-tooltip" className="text-xl font-semibold">FeatureTooltip</h3>
+                <p className="text-muted-foreground">
+                  Surface inline upsells for disabled actions, icons, or compact UI without forcing a modal:
+                </p>
+                <CodeBlock
+                  index={8}
+                  type="quickstart_feature_tooltip"
+                  code={`"use client"
+
+import { FeatureTooltip } from "@/components/featureTooltip/feature-tooltip"
+import { Lock } from "lucide-react"
+
+export function InlineUpsell() {
+  return (
+    <FeatureTooltip
+      title="Unlock scheduled exports"
+      description="Upgrade to automate CSV delivery to your stakeholders."
+      highlights={[
+        "Send summaries to unlimited recipients",
+        "Choose daily, weekly, or monthly cadence",
+        "Attach filtered dashboards",
+      ]}
+      ctaLabel="Upgrade"
+      ctaHref="/pricing"
+    >
+      <button className="inline-flex items-center gap-2 rounded-lg border border-primary/20 px-3 py-2 text-sm font-medium text-muted-foreground hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+        <Lock className="size-4" aria-hidden="true" />
+        Scheduled exports (Pro)
+      </button>
+    </FeatureTooltip>
+  )
+}`}
+                />
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg space-y-1 text-sm text-muted-foreground">
+                  <p>Use it for:</p>
+                  <ul className="space-y-1 pl-4 list-disc">
+                    <li>Disabled buttons that require higher plans</li>
+                    <li>Inline icons in tables or charts</li>
+                    <li>Feature flags where you still want to tease capabilities</li>
                   </ul>
                 </div>
               </div>
@@ -976,6 +1041,168 @@ export function LaunchAnnouncement() {
                     name="children"
                     type="React.ReactNode"
                     description="Optional additional content (e.g. bullet lists or disclaimers)"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* FeatureTooltip API */}
+          <section className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
+                FeatureTooltip API
+              </h2>
+              <p className="text-muted-foreground">Props for lightweight inline upgrade nudges</p>
+            </div>
+
+            <div className="space-y-8">
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Core Props</h3>
+                <div className="space-y-4">
+                  <PropDoc name="title" type="string" description="Headline displayed at the top of the tooltip" />
+                  <PropDoc
+                    name="description"
+                    type="string"
+                    description="Supporting body copy underneath the title"
+                  />
+                  <PropDoc
+                    name="badge"
+                    type="string | null"
+                    defaultValue='"Upgrade to unlock"'
+                    description="Optional badge text shown next to the icon; set to null to hide"
+                  />
+                  <PropDoc
+                    name="icon"
+                    type="LucideIcon"
+                    defaultValue="Lock"
+                    description="Icon rendered within the tooltip header"
+                  />
+                  <PropDoc
+                    name="children"
+                    type="React.ReactNode"
+                    description="Trigger element that displays the tooltip on hover or focus"
+                  />
+                  <PropDoc
+                    name="disabled"
+                    type="boolean"
+                    defaultValue="false"
+                    description="Render children without tooltip behavior when true"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Highlights & Styling</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="highlights"
+                    type='(string | { icon?: LucideIcon; label: string })[]'
+                    description="List of feature value props shown as bullet items"
+                  />
+                  <PropDoc
+                    name="highlightIcon"
+                    type="LucideIcon"
+                    defaultValue="CheckCircle2"
+                    description="Icon used when highlights are provided as strings"
+                  />
+                  <PropDoc
+                    name="className"
+                    type="string"
+                    description="Custom classes applied to the trigger wrapper"
+                  />
+                  <PropDoc
+                    name="contentClassName"
+                    type="string"
+                    description="Custom classes applied to the tooltip content container"
+                  />
+                  <PropDoc
+                    name="badgeClassName"
+                    type="string"
+                    description="Custom classes for styling the badge element"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">CTA & Events</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="ctaLabel"
+                    type="string"
+                    defaultValue='"Upgrade"'
+                    description="Label for the primary call-to-action button"
+                  />
+                  <PropDoc
+                    name="ctaHref"
+                    type="string"
+                    description="Link URL for the CTA when no async handler is provided"
+                  />
+                  <PropDoc
+                    name="ctaPendingLabel"
+                    type="string"
+                    defaultValue='"Working..."'
+                    description="Label shown while onCtaClick is resolving"
+                  />
+                  <PropDoc
+                    name="onCtaClick"
+                    type="() => Promise<void> | void"
+                    description="Async handler invoked when the CTA button is clicked"
+                  />
+                  <PropDoc
+                    name="onCtaSuccess"
+                    type="() => void"
+                    description="Callback fired after the CTA handler resolves successfully"
+                  />
+                  <PropDoc
+                    name="onCtaError"
+                    type="(error: unknown) => void"
+                    description="Callback fired when the CTA handler throws or rejects"
+                  />
+                </div>
+              </div>
+
+              <div className="border-2 border-primary/10 rounded-xl p-6 bg-card/50">
+                <h3 className="text-xl font-semibold mb-4">Positioning & Control</h3>
+                <div className="space-y-4">
+                  <PropDoc
+                    name="side"
+                    type='"top" | "bottom" | "left" | "right"'
+                    defaultValue='"top"'
+                    description="Placement of the tooltip relative to the trigger"
+                  />
+                  <PropDoc
+                    name="align"
+                    type='"start" | "center" | "end"'
+                    defaultValue='"center"'
+                    description="Alignment of the tooltip on the chosen side"
+                  />
+                  <PropDoc
+                    name="sideOffset"
+                    type="number"
+                    defaultValue="12"
+                    description="Pixels of offset between tooltip and trigger"
+                  />
+                  <PropDoc
+                    name="delayDuration"
+                    type="number"
+                    defaultValue="200"
+                    description="Delay in milliseconds before the tooltip appears"
+                  />
+                  <PropDoc
+                    name="open"
+                    type="boolean"
+                    description="Controlled open state for the tooltip"
+                  />
+                  <PropDoc
+                    name="defaultOpen"
+                    type="boolean"
+                    description="Initial open state when uncontrolled"
+                  />
+                  <PropDoc
+                    name="onOpenChange"
+                    type="(open: boolean) => void"
+                    description="Callback fired whenever the tooltip open state changes"
                   />
                 </div>
               </div>

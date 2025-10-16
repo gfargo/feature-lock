@@ -1,0 +1,29 @@
+{
+  "name": "feature-tooltip",
+  "type": "registry:ui",
+  "dependencies": [
+    "react@^19.0.0",
+    "lucide-react@^0.454.0",
+    "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.3.1"
+  ],
+  "registryDependencies": [
+    "button",
+    "badge"
+  ],
+  "files": [
+    {
+      "type": "registry:lib",
+      "path": "components/featureTooltip/feature-tooltip.tsx",
+      "target": "@/components/featureTooltip/feature-tooltip.tsx",
+      "content": ""
+    },
+    {
+      "type": "registry:lib",
+      "path": "components/ui/tooltip.tsx",
+      "target": "@/components/ui/tooltip.tsx",
+      "content": ""
+    }
+  ]
+}

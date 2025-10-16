@@ -23,6 +23,18 @@
       "item": "https://feature-lock.griffen.codes/api/registry/r/paywall-banner-full",
       "file": "r/paywall-banner-full.json",
       "type": "registry:ui"
+    },
+    {
+      "name": "feature-tooltip",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/feature-tooltip",
+      "file": "r/feature-tooltip.json",
+      "type": "registry:ui"
+    },
+    {
+      "name": "feature-tooltip-full",
+      "item": "https://feature-lock.griffen.codes/api/registry/r/feature-tooltip-full",
+      "file": "r/feature-tooltip-full.json",
+      "type": "registry:ui"
     }
   ]
 }
