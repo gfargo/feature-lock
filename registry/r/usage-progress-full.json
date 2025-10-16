@@ -1,0 +1,35 @@
+{
+  "name": "usage-progress-full",
+  "type": "registry:ui",
+  "dependencies": [
+    "react@^19.0.0",
+    "lucide-react@^0.454.0",
+    "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.3.1"
+  ],
+  "registryDependencies": [
+    "button",
+    "badge"
+  ],
+  "files": [
+    {
+      "type": "registry:doc",
+      "path": "components/usageProgress/README.md",
+      "target": "@/components/usageProgress/README.md",
+      "content": ""
+    },
+    {
+      "type": "registry:lib",
+      "path": "components/usageProgress/usage-progress-bar.tsx",
+      "target": "@/components/usageProgress/usage-progress-bar.tsx",
+      "content": ""
+    },
+    {
+      "type": "registry:lib",
+      "path": "components/usageProgress/usage-progress.tsx",
+      "target": "@/components/usageProgress/usage-progress.tsx",
+      "content": ""
+    }
+  ]
+}

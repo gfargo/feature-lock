@@ -499,6 +499,26 @@ export default function DocsPage() {
                     description="Additional text under the summary label"
                   />
                   <PropDoc name="note" type="string" description="Small note displayed alongside CTAs" />
+                  <PropDoc
+                    name="className"
+                    type="string"
+                    description="Custom classes applied to the UsageProgress wrapper"
+                  />
+                  <PropDoc
+                    name="trackClassName"
+                    type="string"
+                    description="Classes appended to the track list container"
+                  />
+                  <PropDoc
+                    name="summaryClassName"
+                    type="string"
+                    description="Classes appended to the summary/info banner"
+                  />
+                  <PropDoc
+                    name="footerClassName"
+                    type="string"
+                    description="Classes appended to the optional footer region"
+                  />
                 </div>
               </div>
 
@@ -1699,6 +1719,7 @@ export function UsageOverview() {
                   <li>• Use inline mode for contextual feature teasers</li>
                   <li>• Provide clear value propositions in overlay content</li>
                   <li>• Persist dismissals with PaywallBanner storage keys to respect user intent</li>
+                  <li>• Surface UsageProgress before users hit their limits</li>
                   <li>• Handle async errors gracefully</li>
                   <li>• Test with keyboard navigation and screen readers</li>
                 </ul>
