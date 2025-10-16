@@ -2,61 +2,61 @@
   "registry": [
     {
       "name": "blur-wrapper",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/blur-wrapper",
+      "item": "https://feature-lock.griffen.codes/r/blur-wrapper",
       "file": "r/blur-wrapper.json",
       "type": "registry:ui"
     },
     {
       "name": "blur-wrapper-full",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/blur-wrapper-full",
+      "item": "https://feature-lock.griffen.codes/r/blur-wrapper-full",
       "file": "r/blur-wrapper-full.json",
       "type": "registry:ui"
     },
     {
       "name": "paywall-banner",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/paywall-banner",
+      "item": "https://feature-lock.griffen.codes/r/paywall-banner",
       "file": "r/paywall-banner.json",
       "type": "registry:ui"
     },
     {
       "name": "paywall-banner-full",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/paywall-banner-full",
+      "item": "https://feature-lock.griffen.codes/r/paywall-banner-full",
       "file": "r/paywall-banner-full.json",
       "type": "registry:ui"
     },
     {
       "name": "feature-tooltip",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/feature-tooltip",
+      "item": "https://feature-lock.griffen.codes/r/feature-tooltip",
       "file": "r/feature-tooltip.json",
       "type": "registry:ui"
     },
     {
       "name": "feature-tooltip-full",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/feature-tooltip-full",
+      "item": "https://feature-lock.griffen.codes/r/feature-tooltip-full",
       "file": "r/feature-tooltip-full.json",
       "type": "registry:ui"
     },
     {
       "name": "upgrade-modal",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/upgrade-modal",
+      "item": "https://feature-lock.griffen.codes/r/upgrade-modal",
       "file": "r/upgrade-modal.json",
       "type": "registry:ui"
     },
     {
       "name": "upgrade-modal-full",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/upgrade-modal-full",
+      "item": "https://feature-lock.griffen.codes/r/upgrade-modal-full",
       "file": "r/upgrade-modal-full.json",
       "type": "registry:ui"
     },
     {
       "name": "usage-progress",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/usage-progress",
+      "item": "https://feature-lock.griffen.codes/r/usage-progress",
       "file": "r/usage-progress.json",
       "type": "registry:ui"
     },
     {
       "name": "usage-progress-full",
-      "item": "https://feature-lock.griffen.codes/api/registry/r/usage-progress-full",
+      "item": "https://feature-lock.griffen.codes/r/usage-progress-full",
       "file": "r/usage-progress-full.json",
       "type": "registry:ui"
     }

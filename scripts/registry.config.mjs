@@ -1,6 +1,6 @@
 export default {
   outDir: "registry",
-  baseUrl: process.env.NEXT_PUBLIC_REGISTRY_URL || "https://feature-lock.griffen.codes/api/registry",
+  baseUrl: process.env.NEXT_PUBLIC_REGISTRY_URL || "https://feature-lock.griffen.codes",
   
   defaults: {
     dependencies: {
