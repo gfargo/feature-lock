@@ -1,0 +1,26 @@
+{
+  "name": "age-gate",
+  "type": "registry:ui",
+  "dependencies": [
+    "react@^19.0.0",
+    "lucide-react@^0.454.0",
+    "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.3.1",
+    "@radix-ui/react-dialog@1.1.4"
+  ],
+  "registryDependencies": [
+    "button",
+    "dialog",
+    "input",
+    "label"
+  ],
+  "files": [
+    {
+      "type": "registry:lib",
+      "path": "components/ageGate/age-gate.tsx",
+      "target": "@/components/ageGate/age-gate.tsx",
+      "content": ""
+    }
+  ]
+}

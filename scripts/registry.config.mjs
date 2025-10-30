@@ -164,5 +164,34 @@ export default {
       exclude: [],
       registryDependencies: ["button", "badge"],
     },
+    {
+      name: "age-gate",
+      fileName: "age-gate.json",
+      type: "registry:ui",
+      dependencies: {
+        "@radix-ui/react-dialog": "1.1.4",
+      },
+      include: [
+        /^components\/ageGate\/age-gate\.tsx$/,
+      ],
+      exclude: [
+        /^components\/ageGate\/README\.md$/,
+      ],
+      registryDependencies: ["button", "dialog", "input", "label"],
+    },
+    {
+      name: "age-gate-full",
+      fileName: "age-gate-full.json",
+      type: "registry:ui",
+      dependencies: {
+        "@radix-ui/react-dialog": "1.1.4",
+      },
+      include: [
+        /^components\/ageGate\/age-gate\.tsx$/,
+        /^components\/ageGate\/README\.md$/,
+      ],
+      exclude: [],
+      registryDependencies: ["button", "dialog", "input", "label"],
+    },
   ],
 };

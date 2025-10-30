@@ -9,6 +9,7 @@ import { BlurWrapperShowcase } from "@/components/home/blur-wrapper-showcase"
 import { FeatureTooltipSection } from "@/components/home/feature-tooltip-section"
 import { UpgradeModalSection } from "@/components/home/upgrade-modal-section"
 import { UsageProgressSection } from "@/components/home/usage-progress-section"
+import { AgeGateSection } from "@/components/home/age-gate-section"
 import { FeatureBenefits } from "@/components/home/feature-benefits"
 import { FeatureFooter } from "@/components/home/feature-footer"
 
@@ -28,6 +29,7 @@ export default function Page() {
           <FeatureTooltipSection />
           <UpgradeModalSection />
           <UsageProgressSection />
+          <AgeGateSection />
           <FeatureBenefits />
           <FeatureFooter />
         </main>

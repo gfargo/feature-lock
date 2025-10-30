@@ -276,6 +276,7 @@ Feature Lock components are distributed via a ShadcnUI-compatible registry. This
 | FeatureTooltip | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/feature-tooltip` |
 | UpgradeModal | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/upgrade-modal` |
 | UsageProgress | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/usage-progress` |
+| AgeGate | ✅ New | `npx shadcn@latest add https://feature-lock.griffen.codes/r/age-gate` |
 
 ### Registry API
 

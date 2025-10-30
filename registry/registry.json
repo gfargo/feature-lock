@@ -59,6 +59,18 @@
       "item": "https://feature-lock.griffen.codes/r/usage-progress-full",
       "file": "r/usage-progress-full.json",
       "type": "registry:ui"
+    },
+    {
+      "name": "age-gate",
+      "item": "https://feature-lock.griffen.codes/r/age-gate",
+      "file": "r/age-gate.json",
+      "type": "registry:ui"
+    },
+    {
+      "name": "age-gate-full",
+      "item": "https://feature-lock.griffen.codes/r/age-gate-full",
+      "file": "r/age-gate-full.json",
+      "type": "registry:ui"
     }
   ]
 }
