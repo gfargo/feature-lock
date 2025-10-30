@@ -9,8 +9,14 @@ vi.mock("@vercel/analytics", () => ({
 }))
 
 // Mock Next.js Link
+type MockLinkProps = React.PropsWithChildren<
+  React.AnchorHTMLAttributes<HTMLAnchorElement>
+> & {
+  href: string;
+};
+
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: any) => (
+  default: ({ children, href, ...props }: MockLinkProps) => (
     <a href={href} {...props}>
       {children}
     </a>
@@ -33,8 +39,21 @@ vi.mock("@/components/ui/badge", () => ({
 }))
 
 // Mock AgeGate component
+type MockAgeGateLabels = {
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+};
+
+type MockAgeGateProps = React.PropsWithChildren<{
+  open?: boolean;
+  method?: string;
+  labels?: MockAgeGateLabels;
+  onVerified?: (age: number) => void;
+  onDenied?: () => void;
+}>;
+
 vi.mock("@/components/ageGate/age-gate", () => ({
-  default: ({ open, onVerified, onDenied, children, method, labels }: any) => (
+  default: ({ open, onVerified, onDenied, children, method, labels }: MockAgeGateProps) => (
     <div data-testid="age-gate" data-open={open} data-method={method}>
       <div>{labels?.title}</div>
       <div>{labels?.description}</div>
