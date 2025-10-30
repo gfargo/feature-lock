@@ -13,17 +13,22 @@ export default {
   },
   
   pathRewriter: (fromPath) => {
-    // Map source paths to installation paths
-    if (fromPath.startsWith("components/")) {
-      return `@/${fromPath}`;
+    // Transform source paths to relative installation paths (shadcn/ui format)
+    const mappings = {
+      'components/': 'components/',
+      'lib/': 'lib/',
+      'hooks/': 'hooks/',
+      'types/': 'types/',
+    };
+
+    for (const [from, to] of Object.entries(mappings)) {
+      if (fromPath.startsWith(from)) {
+        return fromPath.replace(from, to);
+      }
     }
-    if (fromPath.startsWith("lib/")) {
-      return `@/${fromPath}`;
-    }
-    if (fromPath.startsWith("hooks/")) {
-      return `@/${fromPath}`;
-    }
-    return `@/${fromPath}`;
+
+    // Fallback: return path as-is for relative paths
+    return fromPath;
   },
 
   items: [

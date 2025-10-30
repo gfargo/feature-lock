@@ -5,8 +5,7 @@ import path from "path"
 
 type RegistryFile = {
   type: string
-  path: string
-  target: string
+  path: string      // Single path field only (relative format)
   content?: string
 }
 
@@ -52,15 +51,30 @@ export async function GET(request: NextRequest, context: { params: Promise<{ nam
       [key: string]: unknown
     }
 
-    // Populate file contents
+    // Populate file contents (use pre-populated content first, fallback to disk reading)
     const populatedFiles = componentData.files.map((file) => {
-      const sourcePath = path.join(process.cwd(), file.path)
+      // If content is already populated in the registry file, use it
+      if (file.content) {
+        return file
+      }
+
+      // Fallback: convert relative path back to source path for reading
+      let sourcePath = file.path
+      if (file.path.startsWith('components/')) {
+        sourcePath = file.path.replace('components/', 'components/')
+      } else if (file.path.startsWith('lib/')) {
+        sourcePath = file.path.replace('lib/', 'lib/')
+      } else if (file.path.startsWith('hooks/')) {
+        sourcePath = file.path.replace('hooks/', 'hooks/')
+      }
+
+      const fullSourcePath = path.join(process.cwd(), sourcePath)
       let content = ""
 
-      if (fs.existsSync(sourcePath)) {
-        content = fs.readFileSync(sourcePath, "utf-8")
+      if (fs.existsSync(fullSourcePath)) {
+        content = fs.readFileSync(fullSourcePath, "utf-8")
       } else {
-        console.warn(`Warning: File not found: ${sourcePath}`)
+        console.warn(`Warning: File not found: ${fullSourcePath}`)
       }
 
       return { ...file, content }

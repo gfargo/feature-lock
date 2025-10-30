@@ -57,8 +57,8 @@ function buildComponentJSON(allFiles, componentConfig, allComponents) {
 
   // Transform files for registry format
   const files = [...matchedFiles].sort().map(sourcePath => {
-    const targetPath = config.pathRewriter(sourcePath);
-    
+    const relativePath = config.pathRewriter(sourcePath);
+
     // Determine file type based on path and extension
     let fileType = "registry:lib";
     if (sourcePath.endsWith(".tsx") && sourcePath.includes("/components/")) {
@@ -68,12 +68,20 @@ function buildComponentJSON(allFiles, componentConfig, allComponents) {
     } else if (sourcePath.endsWith(".md")) {
       fileType = "registry:doc";
     }
-    
+
+    // Read the actual file content
+    let content = "";
+    try {
+      const fullPath = path.join(ROOT, sourcePath);
+      content = fs.readFileSync(fullPath, 'utf8');
+    } catch (error) {
+      console.warn(`Warning: Could not read file ${sourcePath}:`, error.message);
+    }
+
     return {
       type: fileType,
-      path: sourcePath,
-      target: targetPath,
-      content: ""
+      path: relativePath,  // Relative path for installation (shadcn/ui format)
+      content: content     // Actual file content for static registry
     };
   });
 
